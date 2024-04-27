@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 public class TestMod {
     public static final String MOD_ID = "testmod";
     private static final Logger LOGGER = LogManager.getLogger();
-
+// veryImportant
     public TestMod() {
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
