@@ -1,5 +1,7 @@
 package net.hamnd.testmod;
 
+import net.hamnd.testmod.block.ModBlocks;
+import net.hamnd.testmod.item.ModItems;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -19,6 +21,9 @@ public class TestMod {
     public TestMod() {
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        ModItems.register(modEventBus);
+        ModBlocks.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
 

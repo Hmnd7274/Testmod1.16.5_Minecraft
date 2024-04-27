@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "testmod:zircon"
+    }
+  },
+  "result": {
+    "item": "testmod:zircon_block"
+  }
+}
