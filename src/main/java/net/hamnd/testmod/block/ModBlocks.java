@@ -2,6 +2,7 @@ package net.hamnd.testmod.block;
 
 import net.hamnd.testmod.TestMod;
 import net.hamnd.testmod.block.custom.JumpyBlock;
+import net.hamnd.testmod.block.custom.ZirconLampBlock;
 import net.hamnd.testmod.item.ModItemGroup;
 import net.hamnd.testmod.item.ModItems;
 import net.minecraft.block.AbstractBlock;
@@ -45,6 +46,13 @@ public class ModBlocks {
             () -> new JumpyBlock(Block.Properties.of(Material.STONE)
                     .strength(4f)
                     .harvestLevel(1).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops()),
+            ModItemGroup.TEST_GROUP);
+
+    public static final RegistryObject<Block> ZIRCON_LAMP = registerBlock("zircon_lamp",
+            () -> new ZirconLampBlock(Block.Properties.of(Material.STONE)
+                    .strength(4f)
+                    .harvestLevel(1).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(ZirconLampBlock.LIT) ? 15 : 0)),
             ModItemGroup.TEST_GROUP);
 
     private static <T extends Block>RegistryObject<T> registerBlock(String name, Supplier<T> block, ItemGroup tab) {
