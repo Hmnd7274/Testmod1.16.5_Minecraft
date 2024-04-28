@@ -6,7 +6,6 @@ import net.hamnd.testmod.item.custom.EightBallItem;
 import net.minecraft.item.BlockNamedItem;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -27,10 +26,10 @@ public class ModItems {
                     .tab(ModItemGroup.TEST_GROUP)
                     .stacksTo(1)));
 
-    public static final RegistryObject<Item> BLUEBERRY_SEEDS = ITEMS.register("blueberry_seeds",
+    public static final RegistryObject<Item> MEJOBERRY_SEEDS = ITEMS.register("mejoberry_seeds",
             () -> new BlockNamedItem(ModBlocks.BLUEBERRY_CROP.get(),new Item.Properties()
                     .tab(ModItemGroup.TEST_GROUP)));
-    public static final RegistryObject<Item> BLUEBERRY = ITEMS.register("blueberry",
+    public static final RegistryObject<Item> MEJOBERRY = ITEMS.register("mejoberry",
             () -> new Item(new Item.Properties()
                     .food(new Food.Builder().nutrition(2).saturationMod(2f).build())
                     .tab(ModItemGroup.TEST_GROUP)));

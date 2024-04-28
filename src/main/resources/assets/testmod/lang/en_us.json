@@ -2,8 +2,8 @@
   "item.testmod.zircon": "Zircon",
   "item.testmod.raw_zircon": "Raw Zircon",
   "item.testmod.eight_ball": "Eight Ball",
-  "item.testmod.blueberry": "Blueberry",
-  "item.testmod.blueberry_seeds": "Blueberry_seeds",
+  "item.testmod.mejoberry": "Mejoberry",
+  "item.testmod.mejoberry_seeds": "mejoberry_seeds",
 
   "block.testmod.zircon_block": "Block of Zircon",
   "block.testmod.zircon_ore": "Zircon Ore",

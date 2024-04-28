@@ -17,7 +17,7 @@ public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 6);
 
     @Override
     protected IItemProvider getBaseSeedId() {
-        return ModItems.BLUEBERRY_SEEDS.get();
+        return ModItems.MEJOBERRY_SEEDS.get();
     }
 
     @Override
