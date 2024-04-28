@@ -1,6 +1,7 @@
 package net.hamnd.testmod.item;
 
 import net.hamnd.testmod.TestMod;
+import net.hamnd.testmod.item.custom.EightBallItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -16,6 +17,8 @@ public class ModItems {
             () -> new Item(new Item.Properties().tab(ModItemGroup.TEST_GROUP)));
     public static final RegistryObject<Item> RAW_ZIRCON = ITEMS.register("raw_zircon",
             () -> new Item(new Item.Properties().tab(ItemGroup.TAB_MISC)));
+    public static final RegistryObject<Item> EIGHT_BALL = ITEMS.register("eight_ball",
+            () -> new EightBallItem(new Item.Properties().tab(ItemGroup.TAB_MISC).stacksTo(1)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

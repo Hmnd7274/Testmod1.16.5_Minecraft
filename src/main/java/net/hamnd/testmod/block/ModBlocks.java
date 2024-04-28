@@ -10,7 +10,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
@@ -27,17 +26,17 @@ public class ModBlocks {
     public static final RegistryObject<Block> ZIRCON_BLOCK = registerBlock("zircon_block",
             () -> new Block(Block.Properties.of(Material.STONE)
                     .strength(6f)
-                    .harvestLevel(2).harvestTool(ToolType.PICKAXE)), ModItemGroup.TEST_GROUP);
+                    .harvestLevel(2).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops()), ModItemGroup.TEST_GROUP);
 
     public static final RegistryObject<Block> ZIRCON_ORE = registerBlock("zircon_ore",
             () -> new OreBlock(AbstractBlock.Properties.of(Material.STONE)
-                    .strength(6f)
-                    .harvestLevel(2).harvestTool(ToolType.PICKAXE)), ModItemGroup.TEST_GROUP);
+                    .strength(1f)
+                    .harvestLevel(2).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops()), ModItemGroup.TEST_GROUP);
 
     public static final RegistryObject<Block> DEEPSLATE_ZIRCON_ORE = registerBlock("deepslate_zircon_ore",
             () -> new OreBlock(Block.Properties.of(Material.STONE)
-                    .strength(6f)
-                    .harvestLevel(2).harvestTool(ToolType.PICKAXE)), ModItemGroup.TEST_GROUP);
+                    .strength(10f)
+                    .harvestLevel(2).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops()), ModItemGroup.TEST_GROUP);
 
     private static <T extends Block>RegistryObject<T> registerBlock(String name, Supplier<T> block, ItemGroup tab) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
