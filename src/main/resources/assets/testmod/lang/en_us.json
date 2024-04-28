@@ -2,12 +2,15 @@
   "item.testmod.zircon": "Zircon",
   "item.testmod.raw_zircon": "Raw Zircon",
   "item.testmod.eight_ball": "Eight Ball",
+  "item.testmod.blueberry": "Blueberry",
+  "item.testmod.blueberry_seeds": "Blueberry_seeds",
 
   "block.testmod.zircon_block": "Block of Zircon",
   "block.testmod.zircon_ore": "Zircon Ore",
   "block.testmod.deepslate_zircon_ore": "Deepslate Zircon Ore",
   "block.testmod.jumpy_block": "Jumpy Block",
   "block.testmod.zircon_lamp": "Zircon Lamp",
+  "block.testmod.blueberry_crop": "Blueberry Crop",
 
   "itemGroup.testModTab": "Test Mod"
 }

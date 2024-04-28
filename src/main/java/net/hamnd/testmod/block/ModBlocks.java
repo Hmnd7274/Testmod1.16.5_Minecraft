@@ -1,12 +1,14 @@
 package net.hamnd.testmod.block;
 
 import net.hamnd.testmod.TestMod;
+import net.hamnd.testmod.block.custom.BlueberryCropBlock;
 import net.hamnd.testmod.block.custom.JumpyBlock;
 import net.hamnd.testmod.block.custom.ZirconLampBlock;
 import net.hamnd.testmod.item.ModItemGroup;
 import net.hamnd.testmod.item.ModItems;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.OreBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
@@ -54,6 +56,10 @@ public class ModBlocks {
                     .harvestLevel(1).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops()
                     .lightLevel(state -> state.getValue(ZirconLampBlock.LIT) ? 15 : 0)),
             ModItemGroup.TEST_GROUP);
+
+    public static final RegistryObject<Block> BLUEBERRY_CROP = BLOCKS.register("blueberry_crop",
+            () -> new BlueberryCropBlock(Block.Properties.copy(Blocks.WHEAT))
+    );
 
     private static <T extends Block>RegistryObject<T> registerBlock(String name, Supplier<T> block, ItemGroup tab) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);

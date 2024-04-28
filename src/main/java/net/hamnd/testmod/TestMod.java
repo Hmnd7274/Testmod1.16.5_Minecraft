@@ -2,6 +2,8 @@ package net.hamnd.testmod;
 
 import net.hamnd.testmod.block.ModBlocks;
 import net.hamnd.testmod.item.ModItems;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.client.renderer.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -38,7 +40,7 @@ public class TestMod {
     public static class RegistryEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-
+            RenderTypeLookup.setRenderLayer(ModBlocks.BLUEBERRY_CROP.get(), RenderType.cutout());
         }
     }
 }
