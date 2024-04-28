@@ -14,11 +14,15 @@ public class ModItems {
             DeferredRegister.create(ForgeRegistries.ITEMS, TestMod.MOD_ID);
 
     public static final RegistryObject<Item> ZIRCON = ITEMS.register("zircon",
-            () -> new Item(new Item.Properties().tab(ModItemGroup.TEST_GROUP)));
+            () -> new Item(new Item.Properties()
+                    .tab(ModItemGroup.TEST_GROUP)));
     public static final RegistryObject<Item> RAW_ZIRCON = ITEMS.register("raw_zircon",
-            () -> new Item(new Item.Properties().tab(ItemGroup.TAB_MISC)));
+            () -> new Item(new Item.Properties()
+                    .tab(ModItemGroup.TEST_GROUP)));
     public static final RegistryObject<Item> EIGHT_BALL = ITEMS.register("eight_ball",
-            () -> new EightBallItem(new Item.Properties().tab(ItemGroup.TAB_MISC).stacksTo(1)));
+            () -> new EightBallItem(new Item.Properties()
+                    .tab(ModItemGroup.TEST_GROUP)
+                    .stacksTo(1)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

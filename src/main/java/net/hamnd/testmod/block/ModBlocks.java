@@ -1,6 +1,7 @@
 package net.hamnd.testmod.block;
 
 import net.hamnd.testmod.TestMod;
+import net.hamnd.testmod.block.custom.JumpyBlock;
 import net.hamnd.testmod.item.ModItemGroup;
 import net.hamnd.testmod.item.ModItems;
 import net.minecraft.block.AbstractBlock;
@@ -26,17 +27,25 @@ public class ModBlocks {
     public static final RegistryObject<Block> ZIRCON_BLOCK = registerBlock("zircon_block",
             () -> new Block(Block.Properties.of(Material.STONE)
                     .strength(6f)
-                    .harvestLevel(2).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops()), ModItemGroup.TEST_GROUP);
+                    .harvestLevel(2).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops()),
+            ModItemGroup.TEST_GROUP);
 
     public static final RegistryObject<Block> ZIRCON_ORE = registerBlock("zircon_ore",
             () -> new OreBlock(AbstractBlock.Properties.of(Material.STONE)
-                    .strength(1f)
-                    .harvestLevel(2).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops()), ModItemGroup.TEST_GROUP);
-
+                    .strength(6f)
+                    .harvestLevel(2).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops()),
+            ModItemGroup.TEST_GROUP);
     public static final RegistryObject<Block> DEEPSLATE_ZIRCON_ORE = registerBlock("deepslate_zircon_ore",
             () -> new OreBlock(Block.Properties.of(Material.STONE)
-                    .strength(10f)
-                    .harvestLevel(2).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops()), ModItemGroup.TEST_GROUP);
+                    .strength(7f)
+                    .harvestLevel(2).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops()),
+            ModItemGroup.TEST_GROUP);
+
+    public static final RegistryObject<Block> JUMPY_BLOCK = registerBlock("jumpy_block",
+            () -> new JumpyBlock(Block.Properties.of(Material.STONE)
+                    .strength(4f)
+                    .harvestLevel(1).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops()),
+            ModItemGroup.TEST_GROUP);
 
     private static <T extends Block>RegistryObject<T> registerBlock(String name, Supplier<T> block, ItemGroup tab) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);

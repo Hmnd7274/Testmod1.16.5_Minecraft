@@ -21,7 +21,7 @@ public class EightBallItem extends Item {
     public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         if(!world.isClientSide() && hand == Hand.MAIN_HAND) {
             outputRandomNumber(player);
-            player.getCooldowns().addCooldown(this, 20);
+            player.getCooldowns().addCooldown(this, 5);
         }
 
 
