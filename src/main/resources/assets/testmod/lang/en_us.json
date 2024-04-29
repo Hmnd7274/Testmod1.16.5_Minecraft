@@ -15,7 +15,8 @@
   "block.testmod.redwood_wood": "Redwood Wood",
   "block.testmod.stripped_redwood_log": "Stripped Redwood Log",
   "block.testmod.stripped_redwood_wood": "Stripped Redwood Wood",
-  "block.testmod.redwood_planks": "Redwood Planks",
+  "block.testmod.redwood_sapling": "Redwood Sapling",
+  "block.testmod.redwood_leaves": "Redwood Leaves",
 
   "itemGroup.testModTab": "Test Mod",
   "entity.minecraft.villager.testmod.jumpy_master": "Jumpy Master"
