@@ -6,10 +6,7 @@ import net.hamnd.testmod.block.custom.JumpyBlock;
 import net.hamnd.testmod.block.custom.ZirconLampBlock;
 import net.hamnd.testmod.item.ModItemGroup;
 import net.hamnd.testmod.item.ModItems;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.OreBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -58,8 +55,23 @@ public class ModBlocks {
             ModItemGroup.TEST_GROUP);
 
     public static final RegistryObject<Block> BLUEBERRY_CROP = BLOCKS.register("blueberry_crop",
-            () -> new BlueberryCropBlock(Block.Properties.copy(Blocks.WHEAT))
-    );
+            () -> new BlueberryCropBlock(Block.Properties.copy(Blocks.WHEAT)));
+
+    public static final RegistryObject<Block> REDWOOD_LOG = registerBlock("redwood_log",
+            () -> new RotatedPillarBlock(AbstractBlock.Properties.copy(Blocks.OAK_LOG)), ModItemGroup.TEST_GROUP);
+
+    public static final RegistryObject<Block> REDWOOD_WOOD = registerBlock("redwood_wood",
+            () -> new RotatedPillarBlock(AbstractBlock.Properties.copy(Blocks.OAK_WOOD)), ModItemGroup.TEST_GROUP);
+
+    public static final RegistryObject<Block> STRIPPED_REDWOOD_LOG = registerBlock("stripped_redwood_log",
+            () -> new RotatedPillarBlock(AbstractBlock.Properties.copy(Blocks.STRIPPED_OAK_LOG)), ModItemGroup.TEST_GROUP);
+
+    public static final RegistryObject<Block> STRIPPED_REDWOOD_WOOD = registerBlock("stripped_redwood_wood",
+            () -> new RotatedPillarBlock(AbstractBlock.Properties.copy(Blocks.STRIPPED_OAK_WOOD)), ModItemGroup.TEST_GROUP);
+
+    public static final RegistryObject<Block> REDWOOD_PLANKS = registerBlock("redwood_planks",
+            () -> new RotatedPillarBlock(AbstractBlock.Properties.copy(Blocks.OAK_PLANKS)), ModItemGroup.TEST_GROUP);
+
 
     private static <T extends Block>RegistryObject<T> registerBlock(String name, Supplier<T> block, ItemGroup tab) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);

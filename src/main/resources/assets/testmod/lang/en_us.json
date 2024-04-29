@@ -11,6 +11,11 @@
   "block.testmod.jumpy_block": "Jumpy Block",
   "block.testmod.zircon_lamp": "Zircon Lamp",
   "block.testmod.blueberry_crop": "Blueberry Crop",
+  "block.testmod.redwood_log": "Redwood Log",
+  "block.testmod.redwood_wood": "Redwood Wood",
+  "block.testmod.stripped_redwood_log": "Stripped Redwood Log",
+  "block.testmod.stripped_redwood_wood": "Stripped Redwood Wood",
+  "block.testmod.redwood_planks": "Redwood Planks",
 
   "itemGroup.testModTab": "Test Mod",
   "entity.minecraft.villager.testmod.jumpy_master": "Jumpy Master"
