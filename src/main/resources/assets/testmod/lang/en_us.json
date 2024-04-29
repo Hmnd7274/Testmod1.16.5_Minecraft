@@ -12,5 +12,6 @@
   "block.testmod.zircon_lamp": "Zircon Lamp",
   "block.testmod.blueberry_crop": "Blueberry Crop",
 
-  "itemGroup.testModTab": "Test Mod"
+  "itemGroup.testModTab": "Test Mod",
+  "entity.minecraft.villager.testmod.jumpy_master": "Jumpy Master"
 }

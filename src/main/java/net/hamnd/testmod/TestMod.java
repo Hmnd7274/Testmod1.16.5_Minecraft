@@ -2,6 +2,7 @@ package net.hamnd.testmod;
 
 import net.hamnd.testmod.block.ModBlocks;
 import net.hamnd.testmod.item.ModItems;
+import net.hamnd.testmod.villager.ModVillagers;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.client.renderer.*;
 import net.minecraftforge.common.MinecraftForge;
@@ -27,13 +28,17 @@ public class TestMod {
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
 
+        ModVillagers.register(modEventBus);
+
         modEventBus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-
+        event.enqueueWork(() -> {
+            ModVillagers.registerPOIs();
+        });
     }
 
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
