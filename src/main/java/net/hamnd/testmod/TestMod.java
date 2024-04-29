@@ -2,6 +2,7 @@ package net.hamnd.testmod;
 
 import net.hamnd.testmod.block.ModBlocks;
 import net.hamnd.testmod.item.ModItems;
+import net.hamnd.testmod.painting.ModPaintings;
 import net.hamnd.testmod.villager.ModVillagers;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.client.renderer.*;
@@ -29,6 +30,7 @@ public class TestMod {
         ModBlocks.register(modEventBus);
 
         ModVillagers.register(modEventBus);
+        ModPaintings.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
 
