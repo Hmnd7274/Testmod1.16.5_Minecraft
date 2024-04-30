@@ -3,9 +3,7 @@ package net.hamnd.testmod.item;
 import net.hamnd.testmod.TestMod;
 import net.hamnd.testmod.block.ModBlocks;
 import net.hamnd.testmod.item.custom.EightBallItem;
-import net.minecraft.item.BlockNamedItem;
-import net.minecraft.item.Food;
-import net.minecraft.item.Item;
+import net.minecraft.item.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -33,6 +31,22 @@ public class ModItems {
             () -> new Item(new Item.Properties()
                     .food(new Food.Builder().hunger(2).saturation(2f).build())
                     .group(ModItemGroup.TEST_GROUP)));
+
+    public static final RegistryObject<Item> ZIRCON_SWORD = ITEMS.register("zircon_sword",
+            () -> new SwordItem(ModItemTier.ZIRCON, 3, -2.4f,
+                    new Item.Properties().group(ModItemGroup.TEST_GROUP)));
+    public static final RegistryObject<Item> ZIRCON_PICKAXE = ITEMS.register("zircon_pickaxe",
+            () -> new PickaxeItem(ModItemTier.ZIRCON, 1, -2.8f,
+                    new Item.Properties().group(ModItemGroup.TEST_GROUP)));
+    public static final RegistryObject<Item> ZIRCON_SHOVEL = ITEMS.register("zircon_shovel",
+            () -> new ShovelItem(ModItemTier.ZIRCON, 1.5f, -3.0f,
+                    new Item.Properties().group(ModItemGroup.TEST_GROUP)));
+    public static final RegistryObject<Item> ZIRCON_AXE = ITEMS.register("zircon_axe",
+            () -> new AxeItem(ModItemTier.ZIRCON, 6.0f, -3.1f,
+                    new Item.Properties().group(ModItemGroup.TEST_GROUP)));
+    public static final RegistryObject<Item> ZIRCON_HOE = ITEMS.register("zircon_hoe",
+            () -> new HoeItem(ModItemTier.ZIRCON, -2, -1.0f,
+                    new Item.Properties().group(ModItemGroup.TEST_GROUP)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

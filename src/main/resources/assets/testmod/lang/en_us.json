@@ -4,6 +4,11 @@
   "item.testmod.eight_ball": "Eight Ball",
   "item.testmod.mejoberry": "Mejoberry",
   "item.testmod.mejoberry_seeds": "mejoberry_seeds",
+  "item.testmod.zircon_sword": "Amethyst Sword",
+  "item.testmod.zircon_shovel": "Amethyst Shovel",
+  "item.testmod.zircon_axe": "Amethyst Axe",
+  "item.testmod.zircon_pickaxe": "Amethyst Pickaxe",
+  "item.testmod.zircon_hoe": "Amethyst Hoe",
 
   "block.testmod.zircon_block": "Block of Zircon",
   "block.testmod.zircon_ore": "Zircon Ore",
