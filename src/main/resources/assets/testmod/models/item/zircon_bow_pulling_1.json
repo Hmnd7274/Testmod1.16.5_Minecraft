@@ -1,6 +1,6 @@
 {
   "parent": "testmod:item/zircon_bow",
   "textures": {
-    "layer0": "testmod:item/zircon_bow_pulling_0"
+    "layer0": "testmod:item/zircon_bow_pulling_1"
   }
 }

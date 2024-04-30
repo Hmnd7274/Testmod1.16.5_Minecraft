@@ -48,6 +48,9 @@ public class ModItems {
             () -> new HoeItem(ModItemTier.ZIRCON, -2, -1.0f,
                     new Item.Properties().group(ModItemGroup.TEST_GROUP)));
 
+    public static final RegistryObject<Item> ZIRCON_BOW = ITEMS.register("zircon_bow",
+            () -> new BowItem(new Item.Properties().group(ModItemGroup.TEST_GROUP)));
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }

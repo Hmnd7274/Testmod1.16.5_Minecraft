@@ -3,6 +3,7 @@ package net.hamnd.testmod;
 import com.google.common.collect.ImmutableMap;
 import net.hamnd.testmod.block.ModBlocks;
 import net.hamnd.testmod.item.ModItems;
+import net.hamnd.testmod.item.util.ModItemModelProperties;
 import net.hamnd.testmod.painting.ModPaintings;
 import net.hamnd.testmod.villager.ModVillagers;
 import net.minecraft.block.Block;
@@ -56,6 +57,8 @@ public class TestMod {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             RenderTypeLookup.setRenderLayer(ModBlocks.BLUEBERRY_CROP.get(), RenderType.getCutout());
+
+            ModItemModelProperties.makeBow(ModItems.ZIRCON_BOW.get());
         }
     }
 }
