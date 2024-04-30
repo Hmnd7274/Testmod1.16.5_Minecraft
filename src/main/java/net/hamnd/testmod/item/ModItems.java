@@ -17,22 +17,22 @@ public class ModItems {
 
     public static final RegistryObject<Item> ZIRCON = ITEMS.register("zircon",
             () -> new Item(new Item.Properties()
-                    .tab(ModItemGroup.TEST_GROUP)));
+                    .group(ModItemGroup.TEST_GROUP)));
     public static final RegistryObject<Item> RAW_ZIRCON = ITEMS.register("raw_zircon",
             () -> new Item(new Item.Properties()
-                    .tab(ModItemGroup.TEST_GROUP)));
+                    .group(ModItemGroup.TEST_GROUP)));
     public static final RegistryObject<Item> EIGHT_BALL = ITEMS.register("eight_ball",
             () -> new EightBallItem(new Item.Properties()
-                    .tab(ModItemGroup.TEST_GROUP)
-                    .stacksTo(1)));
+                    .group(ModItemGroup.TEST_GROUP)
+                    .maxStackSize(1)));
 
     public static final RegistryObject<Item> MEJOBERRY_SEEDS = ITEMS.register("mejoberry_seeds",
             () -> new BlockNamedItem(ModBlocks.BLUEBERRY_CROP.get(),new Item.Properties()
-                    .tab(ModItemGroup.TEST_GROUP)));
+                    .group(ModItemGroup.TEST_GROUP)));
     public static final RegistryObject<Item> MEJOBERRY = ITEMS.register("mejoberry",
             () -> new Item(new Item.Properties()
-                    .food(new Food.Builder().nutrition(2).saturationMod(2f).build())
-                    .tab(ModItemGroup.TEST_GROUP)));
+                    .food(new Food.Builder().hunger(2).saturation(2f).build())
+                    .group(ModItemGroup.TEST_GROUP)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

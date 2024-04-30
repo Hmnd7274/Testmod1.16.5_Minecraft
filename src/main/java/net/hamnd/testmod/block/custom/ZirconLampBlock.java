@@ -20,17 +20,17 @@ public class ZirconLampBlock extends Block {
 
     @Override
     @SuppressWarnings("deprecation")
-    public ActionResultType use(BlockState blockState, World world, BlockPos blockPos,
+    public ActionResultType onBlockActivated(BlockState blockState, World world, BlockPos blockPos,
                                 PlayerEntity playerEntity, Hand hand, BlockRayTraceResult blockRayTraceResult) {
-        if(!world.isClientSide() && hand == Hand.MAIN_HAND) {
-            world.setBlock(blockPos, blockState.cycle(LIT), 3);
+        if(!world.isRemote() && hand == Hand.MAIN_HAND) {
+            world.setBlockState(blockPos, blockState.cycleValue(LIT), 3);
         }
 
-        return super.use(blockState, world, blockPos, playerEntity, hand, blockRayTraceResult);
+        return super.onBlockActivated(blockState, world, blockPos, playerEntity, hand, blockRayTraceResult);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(LIT);
     }
 }

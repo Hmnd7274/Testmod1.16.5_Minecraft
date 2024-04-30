@@ -24,31 +24,31 @@ public class EightBallItem extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
-        if(!world.isClientSide() && hand == Hand.MAIN_HAND) {
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
+        if(!world.isRemote() && hand == Hand.MAIN_HAND) {
             outputRandomNumber(player);
-            player.getCooldowns().addCooldown(this, 5);
+            player.getCooldownTracker().setCooldown(this, 5);
         }
 
 
-        return super.use(world, player, hand);
+        return super.onItemRightClick(world, player, hand);
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable World world, List<ITextComponent> iTextComponents, ITooltipFlag iTooltipFlag) {
+    public void addInformation(ItemStack itemStack, @Nullable World world, List<ITextComponent> iTextComponents, ITooltipFlag iTooltipFlag) {
         if(Screen.hasShiftDown()) {
-            iTextComponents.add(new StringTextComponent("Right click to get a random number !").withStyle(TextFormatting.AQUA));
+            iTextComponents.add(new StringTextComponent("Right click to get a random number !").mergeStyle(TextFormatting.AQUA));
         } else {
-            iTextComponents.add(new StringTextComponent("Press SHIFT for more info").withStyle(TextFormatting.YELLOW));
+            iTextComponents.add(new StringTextComponent("Press SHIFT for more info").mergeStyle(TextFormatting.YELLOW));
         }
 
-        super.appendHoverText(itemStack, world, iTextComponents, iTooltipFlag);
+        super.addInformation(itemStack, world, iTextComponents, iTooltipFlag);
     }
 
     private void outputRandomNumber(PlayerEntity player) {
         String message = "Your number is " + getRandomNumber();
         ITextComponent msg = new StringTextComponent(message);
-        player.sendMessage(msg, player.getUUID());
+        player.sendMessage(msg, player.getUniqueID());
     }
 
     private int getRandomNumber() {

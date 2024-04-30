@@ -21,7 +21,7 @@ public class ModVillagers {
             DeferredRegister.create(ForgeRegistries.PROFESSIONS, TestMod.MOD_ID);
 
     public static final RegistryObject<PointOfInterestType> JUMPY_BLOCK_POI = POI_TYPES.register("jumpy_block_poi",
-            () -> new PointOfInterestType("jumpy_block_poi", ImmutableSet.copyOf(ModBlocks.JUMPY_BLOCK.get().getStateDefinition().getPossibleStates()),
+            () -> new PointOfInterestType("jumpy_block_poi", ImmutableSet.copyOf(ModBlocks.JUMPY_BLOCK.get().getStateContainer().getValidStates()),
                     1, 1));
 
 
@@ -31,7 +31,7 @@ public class ModVillagers {
                     JUMPY_BLOCK_POI.get(),
                     ImmutableSet.of(),
                     ImmutableSet.of(),
-                    SoundEvents.VILLAGER_WORK_ARMORER
+                    SoundEvents.ENTITY_VILLAGER_WORK_ARMORER
             )
     );
 

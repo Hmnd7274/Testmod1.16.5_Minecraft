@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 public class ModItemGroup {
     public static final ItemGroup TEST_GROUP = new ItemGroup("testModTab") {
         @Override
-        public ItemStack makeIcon() {
+        public ItemStack createIcon() {
             return new ItemStack(ModItems.ZIRCON.get());
         }
     };

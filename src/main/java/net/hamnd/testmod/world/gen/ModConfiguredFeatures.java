@@ -10,12 +10,12 @@ import net.minecraft.world.gen.trunkplacer.StraightTrunkPlacer;
 
 public class ModConfiguredFeatures {
     public static final ConfiguredFeature<BaseTreeFeatureConfig, ?> REDWOOD =
-            register("redwood",Feature.TREE.configured((new BaseTreeFeatureConfig.Builder(
-                    new SimpleBlockStateProvider(ModBlocks.REDWOOD_LOG.get().defaultBlockState()),
-                    new SimpleBlockStateProvider(ModBlocks.REDWOOD_LEAVES.get().defaultBlockState()),
-                    new BlobFoliagePlacer(FeatureSpread.fixed(2), FeatureSpread.fixed(0), 3),
+            register("redwood",Feature.TREE.withConfiguration((new BaseTreeFeatureConfig.Builder(
+                    new SimpleBlockStateProvider(ModBlocks.REDWOOD_LOG.get().getDefaultState()),
+                    new SimpleBlockStateProvider(ModBlocks.REDWOOD_LEAVES.get().getDefaultState()),
+                    new BlobFoliagePlacer(FeatureSpread.create(2), FeatureSpread.create(0), 3),
                     new StraightTrunkPlacer(6, 4, 0),
-                    new TwoLayerFeature(1, 0, 1))).ignoreVines().build()));
+                    new TwoLayerFeature(1, 0, 1))).setIgnoreVines().build()));
 
     private static <FC extends IFeatureConfig> ConfiguredFeature<FC, ?> register(String string,
                                                                           ConfiguredFeature<FC, ?> configuredFeature) {

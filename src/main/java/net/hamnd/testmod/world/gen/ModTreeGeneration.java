@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 public class ModTreeGeneration {
 
     public static void generateTrees(final BiomeLoadingEvent event) {
-        RegistryKey<Biome> key = RegistryKey.create(Registry.BIOME_REGISTRY, event.getName());
+        RegistryKey<Biome> key = RegistryKey.getOrCreateKey(Registry.BIOME_KEY, event.getName());
         Set<BiomeDictionary.Type> types = BiomeDictionary.getTypes(key);
 
         if(types.contains(BiomeDictionary.Type.PLAINS)) {
@@ -26,8 +26,8 @@ public class ModTreeGeneration {
                     event.getGeneration().getFeatures(GenerationStage.Decoration.VEGETAL_DECORATION);
 
             base.add(() -> ModConfiguredFeatures.REDWOOD
-                    .decorated(Features.Placements.HEIGHTMAP_SQUARE)
-                    .decorated(Placement.COUNT_EXTRA.configured(
+                    .withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT)
+                    .withPlacement(Placement.COUNT_EXTRA.configure(
                             new AtSurfaceWithExtraConfig(1, 0.25f, 2))));
         }
     }

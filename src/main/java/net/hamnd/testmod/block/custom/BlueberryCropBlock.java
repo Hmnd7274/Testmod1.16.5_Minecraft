@@ -15,7 +15,6 @@ public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 6);
         super(properties);
     }
 
-    @Override
     protected IItemProvider getBaseSeedId() {
         return ModItems.MEJOBERRY_SEEDS.get();
     }
@@ -30,8 +29,7 @@ public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 6);
         return 6;
     }
 
-    @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(AGE);
     }
 }

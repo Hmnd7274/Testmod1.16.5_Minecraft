@@ -21,22 +21,21 @@ public class JumpyBlock extends Block {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public ActionResultType use(BlockState blockState, World world, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, BlockRayTraceResult blockRayTraceResult) {
+    public ActionResultType onBlockActivated(BlockState blockState, World world, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, BlockRayTraceResult blockRayTraceResult) {
         // Server: Main hand & Off hand
         // Client: Main hand & Off hand
-        if(!world.isClientSide() && hand == Hand.MAIN_HAND) {
-            playerEntity.sendMessage(new StringTextComponent("Right clicked this !"), playerEntity.getUUID());
+        if(!world.isRemote() && hand == Hand.MAIN_HAND) {
+            playerEntity.sendMessage(new StringTextComponent("Right clicked this !"), playerEntity.getUniqueID());
         }
-        return super.use(blockState, world, blockPos, playerEntity, hand, blockRayTraceResult);
+        return super.onBlockActivated(blockState, world, blockPos, playerEntity, hand, blockRayTraceResult);
     }
 
     @Override
-    public void stepOn(World world, BlockPos blockPos, Entity entity) {
+    public void onEntityWalk(World world, BlockPos blockPos, Entity entity) {
         if(entity instanceof LivingEntity) {
-            ((LivingEntity) entity).addEffect(new EffectInstance(Effects.JUMP, 200));
+            ((LivingEntity) entity).addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 200));
         }
 
-        super.stepOn(world, blockPos, entity);
+        super.onEntityWalk(world, blockPos, entity);
     }
 }

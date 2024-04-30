@@ -11,7 +11,7 @@ import java.util.Random;
 public class RedWoodTree extends Tree {
     @Nullable
     @Override
-    protected ConfiguredFeature<BaseTreeFeatureConfig, ?> getConfiguredFeature(Random random, boolean b) {
+    protected ConfiguredFeature<BaseTreeFeatureConfig, ?> getTreeFeature(Random random, boolean b) {
         return ModConfiguredFeatures.REDWOOD;
     }
 }
