@@ -7,8 +7,6 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.swing.*;
-
 public class ModPaintings {
     public static final DeferredRegister<PaintingType> PAINTING_VARIANTS =
             DeferredRegister.create(ForgeRegistries.PAINTING_TYPES, TestMod.MOD_ID);

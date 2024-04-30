@@ -19,6 +19,7 @@ public class ZirconLampBlock extends Block {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ActionResultType use(BlockState blockState, World world, BlockPos blockPos,
                                 PlayerEntity playerEntity, Hand hand, BlockRayTraceResult blockRayTraceResult) {
         if(!world.isClientSide() && hand == Hand.MAIN_HAND) {

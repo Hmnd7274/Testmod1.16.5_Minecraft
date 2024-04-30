@@ -1,7 +1,6 @@
 package net.hamnd.testmod.world.gen;
 
 import net.hamnd.testmod.block.ModBlocks;
-import net.minecraft.block.Blocks;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
@@ -19,8 +18,8 @@ public class ModConfiguredFeatures {
                     new TwoLayerFeature(1, 0, 1))).ignoreVines().build()));
 
     private static <FC extends IFeatureConfig> ConfiguredFeature<FC, ?> register(String string,
-                                                                                 ConfiguredFeature<FC, ?> configuredFeature) {
-        return (ConfiguredFeature) Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, string, configuredFeature);
+                                                                          ConfiguredFeature<FC, ?> configuredFeature) {
+        return Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, string, configuredFeature);
     }
 
 }

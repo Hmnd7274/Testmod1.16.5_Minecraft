@@ -6,7 +6,6 @@ import net.hamnd.testmod.item.ModItems;
 import net.hamnd.testmod.painting.ModPaintings;
 import net.hamnd.testmod.villager.ModVillagers;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
 import net.minecraft.client.renderer.*;
 import net.minecraft.item.AxeItem;
 import net.minecraftforge.common.MinecraftForge;
@@ -41,9 +40,7 @@ public class TestMod {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        event.enqueueWork(() -> {
-            ModVillagers.registerPOIs();
-        });
+        event.enqueueWork(ModVillagers::registerPOIs);
         event.enqueueWork(() -> {
             AxeItem.STRIPABLES = new ImmutableMap.Builder<Block, Block>().putAll(AxeItem.STRIPABLES)
                     .put(ModBlocks.REDWOOD_LOG.get(), ModBlocks.STRIPPED_REDWOOD_LOG.get())

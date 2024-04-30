@@ -14,8 +14,6 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 
-import java.awt.*;
-
 public class JumpyBlock extends Block {
 
     public JumpyBlock(Properties properties) {
@@ -23,6 +21,7 @@ public class JumpyBlock extends Block {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ActionResultType use(BlockState blockState, World world, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, BlockRayTraceResult blockRayTraceResult) {
         // Server: Main hand & Off hand
         // Client: Main hand & Off hand
