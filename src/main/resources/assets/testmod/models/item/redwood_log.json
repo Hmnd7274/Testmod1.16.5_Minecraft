@@ -1,6 +1,3 @@
 {
-  "parent": "testmod:item/zircon_bow",
-  "textures": {
-    "layer0": "testmod:item/zircon_bow_pulling_0"
-  }
+  "parent": "testmod:block/redwood_log"
 }

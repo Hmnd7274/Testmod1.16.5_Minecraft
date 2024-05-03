@@ -3,7 +3,7 @@ package net.hamnd.testmod.event;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.hamnd.testmod.TestMod;
 import net.hamnd.testmod.item.ModItems;
-import net.hamnd.testmod.villager.ModVillagers;
+import net.hamnd.testmod.entity.villager.ModVillagers;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.ItemStack;

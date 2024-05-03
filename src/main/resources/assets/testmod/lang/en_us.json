@@ -11,6 +11,9 @@
   "item.testmod.zircon_hoe": "Amethyst Hoe",
   "item.testmod.zircon_bow": "Zircon Bow",
 
+  "item.testmod.buff_zombie_spawn_egg": "Buff Zombie Spawn Egg",
+  "item.testmod.pigeon_spawn_egg": "Pigeon Spawn Egg",
+
   "block.testmod.zircon_block": "Block of Zircon",
   "block.testmod.zircon_ore": "Zircon Ore",
   "block.testmod.deepslate_zircon_ore": "Deepslate Zircon Ore",

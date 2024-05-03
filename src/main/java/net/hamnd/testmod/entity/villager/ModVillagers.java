@@ -1,4 +1,4 @@
-package net.hamnd.testmod.villager;
+package net.hamnd.testmod.entity.villager;
 
 import com.google.common.collect.ImmutableSet;
 import net.hamnd.testmod.TestMod;
