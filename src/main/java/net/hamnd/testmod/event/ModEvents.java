@@ -37,7 +37,7 @@ public class ModEvents {
     public static PlayerEntity player;
     public static World world;
 
-    public static Set<SheepEntity> sheeps = new HashSet<SheepEntity>();
+    public static Set<SheepEntity> sheeps = new HashSet<>();
     public static Iterator<SheepEntity> iterator;
 
     public static boolean rayBool;

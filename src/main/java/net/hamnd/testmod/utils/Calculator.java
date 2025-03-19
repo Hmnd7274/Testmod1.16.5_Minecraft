@@ -34,8 +34,8 @@ public class Calculator {
     public static Vector3d rotateAroundZ(Vector3d v, double theta) {
         double radians = Math.toRadians(theta);
 
-        double newX = v.x * Math.cos(theta) - v.y * Math.sin(theta);
-        double newY = v.x * Math.sin(theta) + v.y * Math.cos(theta);
+        double newX = v.x * Math.cos(radians) - v.y * Math.sin(radians);
+        double newY = v.x * Math.sin(radians) + v.y * Math.cos(radians);
         double newZ = v.z;
 
         return new Vector3d(newX, newY, newZ);
