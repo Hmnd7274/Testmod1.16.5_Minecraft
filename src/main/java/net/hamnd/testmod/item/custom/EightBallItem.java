@@ -13,7 +13,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.util.List;
 import java.util.Random;
 
@@ -29,8 +28,6 @@ public class EightBallItem extends Item {
             outputRandomNumber(player);
             player.getCooldownTracker().setCooldown(this, 5);
         }
-
-
         return super.onItemRightClick(world, player, hand);
     }
 

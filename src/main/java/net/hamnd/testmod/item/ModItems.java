@@ -5,8 +5,6 @@ import net.hamnd.testmod.block.ModBlocks;
 import net.hamnd.testmod.entity.ModEntityTypes;
 import net.hamnd.testmod.item.custom.EightBallItem;
 import net.hamnd.testmod.item.custom.ModSpawnEggItem;
-import net.hamnd.testmod.item.util.SharpArrowEntity;
-import net.hamnd.testmod.item.util.SharpArrowItem;
 import net.minecraft.item.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
