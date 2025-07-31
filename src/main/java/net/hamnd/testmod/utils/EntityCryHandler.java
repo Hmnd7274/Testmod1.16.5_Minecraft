@@ -1,8 +1,6 @@
 package net.hamnd.testmod.utils;
 
 import net.hamnd.testmod.event.ModEvents;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.vector.Vector3d;

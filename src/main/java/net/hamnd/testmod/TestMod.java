@@ -4,18 +4,25 @@ import com.google.common.collect.ImmutableMap;
 import net.hamnd.testmod.block.ModBlocks;
 import net.hamnd.testmod.entity.ModEntityTypes;
 import net.hamnd.testmod.item.ModItems;
+import net.hamnd.testmod.item.custom.CustomSwordItem;
 import net.hamnd.testmod.item.util.ModItemModelProperties;
 import net.hamnd.testmod.painting.ModPaintings;
 import net.hamnd.testmod.entity.renderer.*;
 import net.hamnd.testmod.entity.villager.ModVillagers;
 import net.hamnd.testmod.tileentity.ModTileEntities;
 import net.hamnd.testmod.tileentity.renderer.DaisyStatueTileRenderer;
+import net.hamnd.testmod.utils.Calculator;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.*;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.passive.CowEntity;
+import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.item.AxeItem;
+import net.minecraft.item.Item;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -114,6 +121,33 @@ public class TestMod {
         public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
             // register a new block here
             LOGGER.info("HELLO from Register Block");
+        }
+        @SubscribeEvent
+        public static void onRegisterItems(final RegistryEvent.Register<Item> event){
+            // Create your custom sword
+            Item newSword = new CustomSwordItem().setRegistryName("minecraft", "diamond_sword");
+
+            // Register it manually in the item registry
+            event.getRegistry().register(newSword); // 🚀 Override the vanilla sword
+        }
+    }
+    @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+    public static class OtherEvents{
+//    @SubscribeEvent
+        public static void onEntitySpawn(EntityJoinWorldEvent event) {
+            if(!(event.getEntity() instanceof SheepEntity))return;
+            if(event.getWorld() instanceof ServerWorld){
+                SheepEntity oldSheep = (SheepEntity) event.getEntity();
+                event.setCanceled(true); // Stop the vanilla sheep from spawning
+                Calculator.sendMsg("Sheep beamed");
+
+                CowEntity newSheep = new CowEntity(EntityType.COW, event.getWorld());
+                float randomYaw = (float) Math.random() * 360;
+                newSheep.setPositionAndRotation(oldSheep.getPosX(), oldSheep.getPosY(), oldSheep.getPosZ(), randomYaw,0);
+                newSheep.setRenderYawOffset(randomYaw);
+                event.getWorld().addEntity(newSheep);
+                Calculator.sendMsg("TKT" + randomYaw);
+            }
         }
     }
 }

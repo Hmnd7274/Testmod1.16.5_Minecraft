@@ -1,8 +1,15 @@
 package net.hamnd.testmod.utils;
 
+import net.hamnd.testmod.entity.model.CustomSheepModel;
 import net.hamnd.testmod.event.ModEvents;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.LivingRenderer;
+import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.passive.CowEntity;
+import net.minecraft.entity.passive.PigEntity;
+import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
@@ -63,7 +70,6 @@ public class Calculator {
     public static Vector3d getPosVec(LivingEntity entity){
         return new Vector3d(entity.getPosX(), entity.getPosY(), entity.getPosZ());
     }
-
     public static Vector3d getPrevPosVec(LivingEntity entity){
         return new Vector3d(entity.prevPosX, entity.prevPosY, entity.prevPosZ);
     }
@@ -73,37 +79,120 @@ public class Calculator {
     }
 
     public static Vector3d getLookVec(LivingEntity entity){
-        return rotateAroundY(Calculator.rotateAroundX(new Vector3d(0, 0, 0.325F), entity.rotationPitch), -entity.rotationYawHead);
+        float pitch = entity.rotationPitch;
+        if(entity instanceof SheepEntity){
+            pitch = ((SheepEntity) entity).getHeadRotationAngleX(Minecraft.getInstance().getRenderPartialTicks());
+        }
+        return rotateAroundY(Calculator.rotateAroundX(new Vector3d(0, 0, 0.325F), pitch), -entity.rotationYawHead);
     }
-
     public static Vector3d getPrevLookVec(LivingEntity entity){
-        return rotateAroundY(Calculator.rotateAroundX(new Vector3d(0, 0, 0.325F), entity.prevRotationPitch), -entity.prevRotationYawHead);
+        float pitch = entity.prevRotationPitch;
+        if(entity instanceof SheepEntity){
+            pitch = ((SheepEntity) entity).getHeadRotationAngleX(Minecraft.getInstance().getRenderPartialTicks());
+        }
+        return rotateAroundY(Calculator.rotateAroundX(new Vector3d(0, 0, 0.325F), pitch), -entity.prevRotationYawHead);
     }
 
     public static Vector3d vargetLookVec(LivingEntity entity, float x){
-        return rotateAroundY(Calculator.rotateAroundX(new Vector3d(x, 0, 0.325F), entity.rotationPitch), -entity.rotationYawHead);
+        float eyeSpacing = 0.125F;
+        float eyeDistance = 0.325F;
+        float pitch = entity.rotationPitch;
+        float yaw = entity.rotationYawHead;
+        if(getSheepModel(entity) instanceof CustomSheepModel){
+            CustomSheepModel<?> model = (CustomSheepModel<?>) getSheepModel(entity);
+            if(model != null){
+                pitch = model.getHeadRotXPitch() * 180;
+                yaw = model.getHeadRotYYaw() * 180;
+                debug("Sheep");
+            }
+        }
+//        if(entity instanceof SheepEntity){
+//            pitch = ((SheepEntity) entity).getHeadRotationAngleX(Minecraft.getInstance().getRenderPartialTicks());
+//            debug("EHEH");
+//            yaw = ((SheepEntity) entity).getHeadRotationPointY(Minecraft.getInstance().getRenderPartialTicks());
+//        }
+        if(entity instanceof PigEntity){
+            eyeSpacing = 0.14F;
+            eyeDistance = 0.350F;
+        }
+        return rotateAroundY(Calculator.rotateAroundX(new Vector3d(eyeSpacing * x, 0, eyeDistance), pitch), -yaw);
     }
-
     public static Vector3d vargetPrevLookVec(LivingEntity entity, float x){
-        return rotateAroundY(Calculator.rotateAroundX(new Vector3d(x, 0, 0.325F), entity.prevRotationPitch), -entity.prevRotationYawHead);
+        float eyeSpacing = 0.125F;
+        float eyeDistance = 0.325F;
+        float pitch = entity.prevRotationPitch;
+        float yaw = entity.prevRotationYawHead;
+        if(getSheepModel(entity) instanceof CustomSheepModel){
+            CustomSheepModel<?> model = (CustomSheepModel<?>) getSheepModel(entity);
+            if(model != null){
+                pitch = model.getHeadRotXPitch() * 180;
+                yaw = model.getHeadRotYYaw() * 180;
+//                debug("WORK");
+            }
+        }
+
+
+//        if(entity instanceof SheepEntity){
+//
+//            EntityRenderer<? extends Entity> renderer = Minecraft.getInstance().getRenderManager().getRenderer(entity);
+//            if (renderer instanceof LivingRenderer) {
+//                QuadrupedModel<?> entityModel = (QuadrupedModel<?>) ((LivingRenderer<?, ?>) renderer).getEntityModel();
+//            return entityModel.head.rotateAngleX; // Gets the pitch of the sheep's head
+//            float headPitchDegrees = entityModel.bipedHead.rotateAngleX * (180F / (float) Math.PI);
+//            }
+//        }
+        if(entity instanceof PigEntity){
+            eyeSpacing = 0.14F;
+            eyeDistance = 0.350F;
+        }
+        return rotateAroundY(Calculator.rotateAroundX(new Vector3d(eyeSpacing * x, 0, eyeDistance), pitch), -yaw);
     }
 
     public static Vector3d getSmoothLookVec(LivingEntity entity){
         return smoothLerpManual(Minecraft.getInstance().getRenderPartialTicks(), getPrevLookVec(entity), getLookVec(entity));
     }
 
+
     public static Vector3d getPosHeadVec(LivingEntity entity){
-        return additionner(getPosVec(entity), Calculator.rotateAroundY(new Vector3d(0, entity.getHeight() * 0.85F, 0.6F), -entity.renderYawOffset));
+        float heightMultiplier = 0.85F;
+        if(entity.isChild()){
+            heightMultiplier = 0.85F;
+        }
+//        else if(entity instanceof SheepEntity){
+//            toReturn = additionner(getPosVec(entity), Calculator.rotateAroundY(new Vector3d(0, entity.getHeight() * heightMultiplier, 0.6F), -entity.renderYawOffset));
+//        }
+//        else if(entity instanceof PigEntity){
+//            toReturn = additionner(getPosVec(entity), Calculator.rotateAroundY(new Vector3d(0, entity.getHeight() * 0.85F, 0.6F), -entity.renderYawOffset));
+//        }
+//        else if(entity instanceof CowEntity){
+//            toReturn = additionner(getPosVec(entity), Calculator.rotateAroundY(new Vector3d(0, entity.getHeight() * 0.85F, 0.6F), -entity.renderYawOffset));
+//        }
+//        else{
+//            toReturn = additionner(getPosVec(entity), Calculator.rotateAroundY(new Vector3d(0, entity.getHeight() * 0.85F, 0.6F), -entity.renderYawOffset));
+//        }
+        return additionner(getPosVec(entity), Calculator.rotateAroundY(new Vector3d(0, entity.getHeight() * heightMultiplier, 0.6F), -entity.renderYawOffset));
+    }
+    public static Vector3d getPrevPosHeadVec(LivingEntity entity){
+        Vector3d toReturn = null;
+        if(entity instanceof SheepEntity){
+            toReturn = additionner(getPrevPosVec(entity), Calculator.rotateAroundY(new Vector3d(0, entity.getHeight() * 0.85F, 0.6F), -entity.prevRenderYawOffset));
+        }
+        else if(entity instanceof PigEntity){
+            toReturn = additionner(getPrevPosVec(entity), Calculator.rotateAroundY(new Vector3d(0, entity.getHeight() * 0.85F, 0.6F), -entity.prevRenderYawOffset));
+        }
+        else if(entity instanceof CowEntity){
+            toReturn = additionner(getPrevPosVec(entity), Calculator.rotateAroundY(new Vector3d(0, entity.getHeight() * 0.85F, 0.6F), -entity.prevRenderYawOffset));
+        }
+        else{
+            toReturn = additionner(getPrevPosVec(entity), Calculator.rotateAroundY(new Vector3d(0, entity.getHeight() * 0.85F, 0.6F), -entity.prevRenderYawOffset));
+        }
+        return toReturn;
     }
 
-    public static Vector3d getPrevPosHeadVec(LivingEntity entity){
-        return additionner(getPrevPosVec(entity), Calculator.rotateAroundY(new Vector3d(0, entity.getHeight() * 0.85F, 0.6F), -entity.prevRenderYawOffset));
-    }
 
     public static Vector3d vargetPosHeadVec(LivingEntity entity, float x){
         return additionner(getPosVec(entity), Calculator.rotateAroundY(new Vector3d(x, entity.getHeight() * 0.95F, 0.6F), -entity.renderYawOffset));
     }
-
     public static Vector3d vargetPrevPosHeadVec(LivingEntity entity, float x){
         return additionner(getPrevPosVec(entity), Calculator.rotateAroundY(new Vector3d(x, entity.getHeight() * 0.95F, 0.6F), -entity.prevRenderYawOffset));
     }
@@ -115,7 +204,6 @@ public class Calculator {
     public static Vector3d getPosHeadLookVec(LivingEntity entity){
         return additionner(getPosHeadVec(entity), getLookVec(entity));
     }
-
     public static Vector3d getPrevPosHeadLookVec(LivingEntity entity){
         return additionner(getPrevPosHeadVec(entity), getPrevLookVec(entity));
     }
@@ -123,24 +211,27 @@ public class Calculator {
     public static Vector3d vargetPosHeadLookVec(LivingEntity entity, float x){
         return additionner(getPosHeadVec(entity), vargetLookVec(entity, x));
     }
-
     public static Vector3d vargetPrevPosHeadLookVec(LivingEntity entity, float x){
         return additionner(getPrevPosHeadVec(entity), vargetPrevLookVec(entity, x));
-    }
-
-    public static Vector3d get2PosHeadLookVec(LivingEntity entity){
-        return additionner(getPosHeadVec(entity), multiply(entity.getLookVec(), 2));
-    }
-
-    public static Vector3d getSmoothPosHeadLookVec(LivingEntity entity){
-        return smoothLerpManual(Minecraft.getInstance().getRenderPartialTicks(), getPrevPosHeadLookVec(entity), getPosHeadLookVec(entity));
     }
 
     public static Vector3d getSmoothAllEye(LivingEntity entity, float x){
         return smoothLerpManual(Minecraft.getInstance().getRenderPartialTicks(), vargetPrevPosHeadLookVec(entity, x), vargetPosHeadLookVec(entity, x));
     }
 
-    //DEBUGING FUNCTIONS
+
+    public static EntityModel<?> getSheepModel(LivingEntity entity){
+        EntityRenderer<? super LivingEntity> renderer = Minecraft.getInstance().getRenderManager().getRenderer(entity);
+        // Check if it's our custom renderer
+        if (renderer != null) {
+            return ((LivingRenderer<?, ?>) renderer).getEntityModel();
+        }
+        sendMsg("ModelBuged");
+        return null; // Not a custom model
+    }
+
+
+    //DEBUGGING FUNCTIONS
     public static String vecToString(Vector3d vec) {
         return ("\n\n\n" + vec.x + "\n" + vec.y + "\n" + vec.z);
     }
