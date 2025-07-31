@@ -1,9 +1,5 @@
 package net.hamnd.testmod.item.custom;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.SpawnEggItem;
-import net.minecraftforge.common.ForgeSpawnEggItem;
-
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.dispenser.IBlockSource;

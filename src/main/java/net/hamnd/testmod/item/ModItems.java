@@ -3,8 +3,7 @@ package net.hamnd.testmod.item;
 import net.hamnd.testmod.TestMod;
 import net.hamnd.testmod.block.ModBlocks;
 import net.hamnd.testmod.entity.ModEntityTypes;
-import net.hamnd.testmod.item.custom.EightBallItem;
-import net.hamnd.testmod.item.custom.ModSpawnEggItem;
+import net.hamnd.testmod.item.custom.*;
 import net.minecraft.item.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
@@ -58,6 +57,9 @@ public class ModItems {
                     new Item.Properties().group(ModItemGroup.TEST_GROUP)));
     public static final RegistryObject<ModSpawnEggItem> PIGEON_SPAWN_EGG = ITEMS.register("pigeon_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityTypes.PIGEON, 0x879995, 0x576ABC,
+                    new Item.Properties().group(ModItemGroup.TEST_GROUP)));
+    public static final RegistryObject<ModSpawnEggItem> DAISY_SPAWN_EGG = ITEMS.register("daisy_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityTypes.DAISY, 0x879995, 0x576ABC,
                     new Item.Properties().group(ModItemGroup.TEST_GROUP)));
 
     public static void register(IEventBus eventBus) {

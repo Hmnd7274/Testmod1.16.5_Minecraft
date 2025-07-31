@@ -18,7 +18,7 @@ public class ModEntityTypes {
     public static final RegistryObject<EntityType<BuffZombieEntity>> BUFF_ZOMBIE =
             ENTITY_TYPES.register("buff_zombie",
                     () -> EntityType.Builder.create(BuffZombieEntity::new,
-                                    EntityClassification.MONSTER).size(1f, 3f)
+                                    EntityClassification.MONSTER).size(1.4f, 2.6f)
                             .build(new ResourceLocation(TestMod.MOD_ID, "buff_zombie").toString()));
 
     public static final RegistryObject<EntityType<PigeonEntity>> PIGEON =
@@ -27,6 +27,11 @@ public class ModEntityTypes {
                                     EntityClassification.CREATURE).size(0.4f, 0.3f)
                             .build(new ResourceLocation(TestMod.MOD_ID, "pigeon").toString()));
 
+    public static final RegistryObject<EntityType<DaisyEntity>> DAISY =
+            ENTITY_TYPES.register("daisy",
+                    () -> EntityType.Builder.create(DaisyEntity::new,
+                                    EntityClassification.CREATURE).size(1.4F, 2.7F)
+                            .build(new ResourceLocation(TestMod.MOD_ID, "daisy").toString()));
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);
     }

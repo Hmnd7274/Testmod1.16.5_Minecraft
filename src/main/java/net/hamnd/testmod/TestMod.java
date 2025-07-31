@@ -6,11 +6,13 @@ import net.hamnd.testmod.entity.ModEntityTypes;
 import net.hamnd.testmod.item.ModItems;
 import net.hamnd.testmod.item.util.ModItemModelProperties;
 import net.hamnd.testmod.painting.ModPaintings;
+import net.hamnd.testmod.entity.renderer.*;
 import net.hamnd.testmod.entity.villager.ModVillagers;
-import net.hamnd.testmod.entity.renderer.BuffZombieRenderer;
-import net.hamnd.testmod.entity.renderer.PigeonRenderer;
+import net.hamnd.testmod.tileentity.ModTileEntities;
+import net.hamnd.testmod.tileentity.renderer.DaisyStatueTileRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.*;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.AxeItem;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -78,6 +80,7 @@ public class TestMod {
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BUFF_ZOMBIE.get(), BuffZombieRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.PIGEON.get(), PigeonRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DAISY.get(), DaisyRenderer::new);
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {
