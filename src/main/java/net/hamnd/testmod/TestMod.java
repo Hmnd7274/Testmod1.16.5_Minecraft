@@ -18,6 +18,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -41,6 +42,7 @@ public class TestMod {
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+        ModTileEntities.register(modEventBus);
 
         ModVillagers.register(modEventBus);
         ModPaintings.register(modEventBus);
@@ -75,12 +77,18 @@ public class TestMod {
             RenderTypeLookup.setRenderLayer(ModBlocks.REDWOOD_LEAVES.get(), RenderType.getCutout());
             RenderTypeLookup.setRenderLayer(ModBlocks.REDWOOD_SAPLING.get(), RenderType.getCutout());
 
+            RenderTypeLookup.setRenderLayer(ModBlocks.DAISY_STATUE.get(), RenderType.getCutout()); // ou translucent() si plus de transparence
+
             ModItemModelProperties.makeBow(ModItems.ZIRCON_BOW.get());
+
+            ClientRegistry.bindTileEntityRenderer(ModTileEntities.DAISY_STATUE_TILE.get(),
+                    DaisyStatueTileRenderer::new);
         });
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BUFF_ZOMBIE.get(), BuffZombieRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.PIGEON.get(), PigeonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DAISY.get(), DaisyRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DAISY_STATUE_ENTITY.get(), DaisyStatueEntityRenderer::new);
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {

@@ -1,8 +1,9 @@
 package net.hamnd.testmod.entity;
 
 import net.hamnd.testmod.TestMod;
-import net.hamnd.testmod.entity.custom.BuffZombieEntity;
-import net.hamnd.testmod.entity.custom.PigeonEntity;
+import net.hamnd.testmod.entity.custom.DaisyEntity;
+import net.hamnd.testmod.entity.custom.DaisyStatueEntity;
+import net.hamnd.testmod.entity.custom.*;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
@@ -32,6 +33,13 @@ public class ModEntityTypes {
                     () -> EntityType.Builder.create(DaisyEntity::new,
                                     EntityClassification.CREATURE).size(1.4F, 2.7F)
                             .build(new ResourceLocation(TestMod.MOD_ID, "daisy").toString()));
+
+    public static final RegistryObject<EntityType<DaisyStatueEntity>> DAISY_STATUE_ENTITY =
+            ENTITY_TYPES.register("daisy_statue_entity",
+                    () -> EntityType.Builder.create(DaisyStatueEntity::new,
+                                    EntityClassification.CREATURE).size(0.75F, 1F)
+                            .build(new ResourceLocation(TestMod.MOD_ID, "daisy_statue_entity").toString()));
+
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);
     }

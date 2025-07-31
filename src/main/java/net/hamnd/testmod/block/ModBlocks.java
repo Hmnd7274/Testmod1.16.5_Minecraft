@@ -1,10 +1,8 @@
 package net.hamnd.testmod.block;
 
 import net.hamnd.testmod.TestMod;
-import net.hamnd.testmod.block.custom.BlueberryCropBlock;
-import net.hamnd.testmod.block.custom.JumpyBlock;
-import net.hamnd.testmod.block.custom.ZirconLampBlock;
-import net.hamnd.testmod.block.custom.trees.RedWoodTree;
+import net.hamnd.testmod.block.custom.*;
+import net.hamnd.testmod.block.custom.trees.*;
 import net.hamnd.testmod.item.ModItemGroup;
 import net.hamnd.testmod.item.ModItems;
 import net.minecraft.block.*;
@@ -12,6 +10,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
@@ -84,7 +84,14 @@ public class ModBlocks {
     public static final RegistryObject<Block> REDWOOD_SAPLING = registerBlock("redwood_sapling",
             () -> new SaplingBlock(new RedWoodTree(), AbstractBlock.Properties.from(Blocks.OAK_SAPLING)), ModItemGroup.TEST_GROUP);
 
+    public static final RegistryObject<Block> DAISY_STATUE = registerBlock("daisy_statue",
+            () -> new DaisyStatueBlock(AbstractBlock.Properties.create(Material.ROCK)
+                    .doesNotBlockMovement().setBlocksVision(ModBlocks::isntSolid)
+                    .setRequiresTool().harvestLevel(3).harvestTool(ToolType.PICKAXE).hardnessAndResistance(10.0F, 1200.0F)), ModItemGroup.TEST_GROUP);
 
+    private static Boolean isntSolid(BlockState state, IBlockReader reader, BlockPos pos) {
+        return false;
+    }
     private static <T extends Block>RegistryObject<T> registerBlock(String name, Supplier<T> block, ItemGroup tab) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn, tab);

@@ -2,8 +2,7 @@ package net.hamnd.testmod.event;
 
 import net.hamnd.testmod.TestMod;
 import net.hamnd.testmod.entity.ModEntityTypes;
-import net.hamnd.testmod.entity.custom.BuffZombieEntity;
-import net.hamnd.testmod.entity.custom.PigeonEntity;
+import net.hamnd.testmod.entity.custom.*;
 import net.hamnd.testmod.item.custom.ModSpawnEggItem;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.event.RegistryEvent;
@@ -18,6 +17,7 @@ public class ModEventBusEvents {
         event.put(ModEntityTypes.BUFF_ZOMBIE.get(), BuffZombieEntity.setCustomAttributes().create());
         event.put(ModEntityTypes.PIGEON.get(), PigeonEntity.setCustomAttributes().create());
         event.put(ModEntityTypes.DAISY.get(), DaisyEntity.setCustomAttributes().create());
+        event.put(ModEntityTypes.DAISY_STATUE_ENTITY.get(), DaisyStatueEntity.setCustomAttributes().create());
     }
 
     @SubscribeEvent
