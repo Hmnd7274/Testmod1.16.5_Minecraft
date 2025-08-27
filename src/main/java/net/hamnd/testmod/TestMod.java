@@ -2,6 +2,7 @@ package net.hamnd.testmod;
 
 import com.google.common.collect.ImmutableMap;
 import net.hamnd.testmod.block.ModBlocks;
+import net.hamnd.testmod.commands.ModCommands;
 import net.hamnd.testmod.entity.ModEntityTypes;
 import net.hamnd.testmod.item.ModItems;
 import net.hamnd.testmod.item.custom.CustomSwordItem;
@@ -12,6 +13,7 @@ import net.hamnd.testmod.entity.villager.ModVillagers;
 import net.hamnd.testmod.tileentity.ModTileEntities;
 import net.hamnd.testmod.tileentity.renderer.DaisyStatueTileRenderer;
 import net.hamnd.testmod.utils.Calculator;
+import net.hamnd.testmod.world.gen.trunkplacer.ModTrunkPlacerTypes;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.*;
 import net.minecraft.entity.EntityType;
@@ -21,6 +23,7 @@ import net.minecraft.item.AxeItem;
 import net.minecraft.item.Item;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -55,6 +58,7 @@ public class TestMod {
         ModPaintings.register(modEventBus);
 
         ModEntityTypes.register(modEventBus);
+        ModTrunkPlacerTypes.registerTrunkPlacers();
 
         modEventBus.addListener(this::setup);
         // Register the doClientStuff method for modloading
@@ -96,6 +100,12 @@ public class TestMod {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.PIGEON.get(), PigeonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DAISY.get(), DaisyRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DAISY_STATUE_ENTITY.get(), DaisyStatueEntityRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.CAMERA_ENTITY.get(), CameraEntityRenderer::new);
+    }
+
+    @SubscribeEvent
+    public void onRegisterCommands(RegisterCommandsEvent event) {
+        ModCommands.register(event.getDispatcher());
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {

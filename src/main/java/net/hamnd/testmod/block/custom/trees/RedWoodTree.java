@@ -1,6 +1,6 @@
 package net.hamnd.testmod.block.custom.trees;
 
-import net.hamnd.testmod.world.gen.ModConfiguredFeatures;
+import net.hamnd.testmod.world.gen.feature.ModConfiguredFeatures;
 import net.minecraft.block.trees.Tree;
 import net.minecraft.world.gen.feature.BaseTreeFeatureConfig;
 import net.minecraft.world.gen.feature.ConfiguredFeature;

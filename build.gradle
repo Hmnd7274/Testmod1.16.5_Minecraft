@@ -106,6 +106,13 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
+    maven {
+        name = "forge"
+        url = "https://maven.minecraftforge.net"
+    }
+    mavenCentral()
+    mavenLocal()
+    maven { url = "https://files.minecraftforge.net/maven" }
     // Put repositories for dependencies here
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
 
