@@ -1,5 +1,6 @@
 package net.hamnd.testmod.world.gen;
 
+import net.hamnd.testmod.world.gen.feature.ModConfiguredFeatures;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
@@ -22,7 +23,7 @@ public class ModTreeGeneration {
         Set<BiomeDictionary.Type> types = BiomeDictionary.getTypes(key);
 
         if(types.contains(BiomeDictionary.Type.PLAINS)) {
-            List<Supplier< ConfiguredFeature<?, ?>>> base =
+            List<Supplier<ConfiguredFeature<?, ?>>> base =
                     event.getGeneration().getFeatures(GenerationStage.Decoration.VEGETAL_DECORATION);
 
             base.add(() -> ModConfiguredFeatures.REDWOOD
