@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 public class ModWorldEvents {
 
     @SubscribeEvent
-    public static void biomeLoadingEvnt(final BiomeLoadingEvent event) {
+    public static void biomeLoadingEvent(final BiomeLoadingEvent event) {
         ModOreGeneration.generateOres(event);
         ModTreeGeneration.generateTrees(event);
 

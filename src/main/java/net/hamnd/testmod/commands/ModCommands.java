@@ -2,6 +2,7 @@ package net.hamnd.testmod.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.hamnd.testmod.world.gen.feature.ModConfiguredFeatures;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -17,6 +18,8 @@ public class ModCommands {
                 .executes(ModCommands::spawnTreeA));
         dispatcher.register(Commands.literal("treeb")
                 .executes(ModCommands::spawnTreeB));
+        dispatcher.register(Commands.literal("h")
+                .executes(ModCommands::h));
     }
 
     private static int spawnTree(CommandContext<CommandSource> context) {
@@ -55,6 +58,11 @@ public class ModCommands {
                 source.getWorld().getChunkProvider().getChunkGenerator(),
                 source.getWorld().getRandom(),
                 pos);
+        return 1;
+    }
+
+    private static int h(CommandContext<CommandSource> context) throws CommandSyntaxException {
+        context.getSource().asPlayer().getFoodStats().setFoodLevel(0);
         return 1;
     }
 }

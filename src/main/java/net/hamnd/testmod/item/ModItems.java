@@ -62,6 +62,11 @@ public class ModItems {
             () -> new ModSpawnEggItem(ModEntityTypes.DAISY, 0x879995, 0x576ABC,
                     new Item.Properties().group(ModItemGroup.TEST_GROUP)));
 
+    public static final RegistryObject<Item> FIRE_ITEM = ITEMS.register("fire_item",
+            () -> new Item(new Item.Properties()
+                    .food(new Food.Builder().setAlwaysEdible().build())
+                    .group(ModItemGroup.TEST_GROUP)));
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }
