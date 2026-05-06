@@ -2,38 +2,32 @@ package net.hamnd.testmod;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod(TestMod.MOD_ID)
 public class TestMod {
     public static final String MOD_ID = "testmod";
-    private static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
 
     public TestMod() {
+        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        // Enregistre la structure via DeferredRegister
+        ModStructures.STRUCTURES.register(modBus);
 
-        modEventBus.addListener(this::commonSetup);
+        // commonSetup : enregistre le Piece + patches statiques
+        modBus.addListener(this::commonSetup);
 
-        MinecraftForge.EVENT_BUS.register(this);
+        // BiomeLoadingEvent : injecte la structure dans les biomes jungle
+        // Ce listener est sur le FORGE bus, pas le MOD bus
+        MinecraftForge.EVENT_BUS.register(new BiomeEvents());
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event) {
-
-    }
-
-    @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-    public static class RegistryEvents {
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {
-
-        }
+    private void commonSetup(FMLCommonSetupEvent event) {
+        event.enqueueWork(ModStructures::setup);
     }
 }
