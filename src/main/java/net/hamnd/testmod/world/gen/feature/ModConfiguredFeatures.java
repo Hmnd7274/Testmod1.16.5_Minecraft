@@ -29,7 +29,7 @@ public class ModConfiguredFeatures {
                             new SimpleBlockStateProvider(Blocks.JUNGLE_LOG.getDefaultState()),
                             new SimpleBlockStateProvider(Blocks.JUNGLE_LEAVES.getDefaultState()),
                             new JungleFoliagePlacer(FeatureSpread.create(2), FeatureSpread.create(0), 2),
-                            new CustomTrunkPlacer(10, 2, 19),
+                            new CustomTrunkPlacer(10, 2, 10),
                             new TwoLayerFeature(1, 1, 2)))
                     .setDecorators(ImmutableList.of(TrunkVineTreeDecorator.INSTANCE, LeaveVineTreeDecorator.field_236871_b_)).build()));
 
@@ -39,9 +39,11 @@ public class ModConfiguredFeatures {
                             new SimpleBlockStateProvider(Blocks.JUNGLE_LOG.getDefaultState()),
                             new SimpleBlockStateProvider(Blocks.JUNGLE_LEAVES.getDefaultState()),
                             new JungleFoliagePlacer(FeatureSpread.create(3), FeatureSpread.create(0), 0),
-                            new CustomTrunkPlacer(11, 1, 1),
+                            new CustomTrunkPlacer(14, 7, 1),
                             new TwoLayerFeature(1, 1, 2)))
-                    .setDecorators(ImmutableList.of(TrunkVineTreeDecorator.INSTANCE, LeaveVineTreeDecorator.field_236871_b_)).build()).withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT).chance(100));
+                    .setDecorators(ImmutableList.of(TrunkVineTreeDecorator.INSTANCE, LeaveVineTreeDecorator.field_236871_b_)).build())
+//                    .withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT).chance(100)
+            );
     
     public static final ConfiguredFeature<BaseTreeFeatureConfig, ?> TREEB =
             register("treeb", Feature.TREE.withConfiguration((

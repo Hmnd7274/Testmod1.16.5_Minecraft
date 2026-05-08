@@ -100,7 +100,7 @@ public class TestMod {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.PIGEON.get(), PigeonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DAISY.get(), DaisyRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DAISY_STATUE_ENTITY.get(), DaisyStatueEntityRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.CAMERA_ENTITY.get(), CameraEntityRenderer::new);
+//        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.CAMERA_ENTITY.get(), CameraEntityRenderer::new);
     }
 
     @SubscribeEvent

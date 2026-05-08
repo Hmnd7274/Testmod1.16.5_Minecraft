@@ -3,10 +3,8 @@ package net.hamnd.testmod.event;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.hamnd.testmod.TestMod;
-import net.hamnd.testmod.entity.model.CustomSheepModel;
 import net.hamnd.testmod.entity.villager.ModVillagers;
 import net.hamnd.testmod.item.ModItems;
-import net.hamnd.testmod.utils.EntityCryHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
@@ -107,109 +105,109 @@ public class ModEvents {
         }
     }
 
-    @SubscribeEvent
-    public static void onLivingHurt(LivingHurtEvent event){
-        if(event.getSource().getTrueSource() instanceof PlayerEntity){
-            if(event.getEntityLiving() instanceof SheepEntity){
-                cryingEntities.add((SheepEntity) event.getEntityLiving());
-                iterator = cryingEntities.iterator();
-                sheep = (SheepEntity) event.getEntityLiving();
-                sendMsg("added");
-            }
-        }
-        if(event.getEntityLiving() instanceof SheepEntity){
-            if(getSheepModel(event.getEntityLiving()) instanceof CustomSheepModel){
-                sendMsg("YESSS");
-            }
-        }
-    }
+//    @SubscribeEvent
+//    public static void onLivingHurt(LivingHurtEvent event){
+//        if(event.getSource().getTrueSource() instanceof PlayerEntity){
+//            if(event.getEntityLiving() instanceof SheepEntity){
+//                cryingEntities.add((SheepEntity) event.getEntityLiving());
+//                iterator = cryingEntities.iterator();
+//                sheep = (SheepEntity) event.getEntityLiving();
+//                sendMsg("added");
+//            }
+//        }
+//        if(event.getEntityLiving() instanceof SheepEntity){
+//            if(getSheepModel(event.getEntityLiving()) instanceof CustomSheepModel){
+//                sendMsg("YESSS");
+//            }
+//        }
+//    }
 
     @SubscribeEvent
     public static void onDeath(LivingDeathEvent event){
         if(cryingEntities == null)return;
         cryingEntities.remove(event.getEntityLiving());
     }
-
-    @SubscribeEvent
-    public static void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-        if(world == null || sheep == null)return;
-        CustomSheepModel<?> model = (CustomSheepModel<?>) getSheepModel(sheep);
-        assert model != null;
-        if(sheep.renderYawOffset != stored){
-            sendMsg(Float.toString(sheep.renderYawOffset));
-            stored = sheep.renderYawOffset;
-        }
-        if(cryingEntities.isEmpty() || world == null)return;
-        if(world.getGameTime() % 3 == 0){
-            for (Iterator<SheepEntity> i = cryingEntities.iterator(); i.hasNext();){
-                SheepEntity sheep = i.next();
-                Vector3d sheepLeftEyeVec = getSmoothAllEye(sheep, -0.125F);
-                Vector3d sheepRightEyeVec = getSmoothAllEye(sheep, 0.125F);
-                world.addParticle(ParticleTypes.FALLING_WATER,
-                        sheepLeftEyeVec.x,
-                        sheepLeftEyeVec.y,
-                        sheepLeftEyeVec.z, 0, 0, 0);
-                world.addParticle(ParticleTypes.FALLING_WATER,
-                        sheepRightEyeVec.x,
-                        sheepRightEyeVec.y,
-                        sheepRightEyeVec.z, 0, 0, 0);
-            }
-            EntityCryHandler.makeEntityCry(cryingEntities);
-        }
-    }
-
-    @SubscribeEvent
-    public static void onJPressed(InputEvent.KeyInputEvent event){
-        // J key
-        if(event.getKey() == 74 && event.getAction() == GLFW.GLFW_PRESS){
-            sendMsg(Integer.toString(cryingEntities.size()));
-            rayBool = !rayBool;
-        }
-        // K key
-//        if(event.getKey() == 75 && event.getAction() == GLFW.GLFW_PRESS){
-//            sendMsg(serverWorld.toString());
+//
+//    @SubscribeEvent
+//    public static void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
+//        if(world == null || sheep == null)return;
+//        CustomSheepModel<?> model = (CustomSheepModel<?>) getSheepModel(sheep);
+//        assert model != null;
+//        if(sheep.renderYawOffset != stored){
+//            sendMsg(Float.toString(sheep.renderYawOffset));
+//            stored = sheep.renderYawOffset;
 //        }
-        if(sheep == null)return;
-        CustomSheepModel<?> model = (CustomSheepModel<?>) getSheepModel(sheep);
-        if(model == null)return;
-        if(event.getKey() == 75 && event.getAction() == GLFW.GLFW_PRESS){
-
-            rayTest = multiply(model.gettkt(), 0.1F);
-            sendMsg(Float.toString(sheep.renderYawOffset));
-
-            rayTest = additionner(getPosVec(sheep), rotateAroundY(multiply(model.gettkt(), 0.1F), sheep.renderYawOffset));
-        }
-
-        if(event.getKey() == 76 && event.getAction() == GLFW.GLFW_PRESS){
-            model.setHeadYaw(90);
-            sendMsg("headYaw : 90");
-        }
-//B
-        if(event.getKey() == 66 && event.getAction() == GLFW.GLFW_PRESS){
-            rayTest = null;
-        }
-    }
-
-    @SubscribeEvent
-    public static void onRenderWorldLast(RenderWorldLastEvent event){
-        MatrixStack matrixStack = event.getMatrixStack();
-        if(cryingEntities == null || !rayBool)return;
-        for(Iterator<SheepEntity> i = cryingEntities.iterator(); i.hasNext();){
-            SheepEntity sheep = i.next();
-            Vector3d sheepPosVec = getSmoothPosVec(sheep);
-            Vector3d sheepPosHeadVec = getSmoothPosHeadVec(sheep);
-            Vector3d sheepLeftEyeVec = getSmoothAllEye(sheep, -1);
-            Vector3d sheepRightEyeVec = getSmoothAllEye(sheep, 1);
-            drawLine(matrixStack, new Vector3d(0,0,0), sheepPosVec, 1, 0, 0, 1);
-
-            if(rayTest != null){
-                drawLine(matrixStack, sheepPosVec, rayTest, 1,1,0,1);
-            }
-            else {
-                drawLine(matrixStack, sheepPosVec, sheepPosHeadVec, 0, 1, 0, 1);
-                drawLine(matrixStack, sheepPosHeadVec, sheepLeftEyeVec, 0, 0, 1, 1);
-                drawLine(matrixStack, sheepPosHeadVec, sheepRightEyeVec, 0, 0, 1, 1);
-            }
-        }
-    }
+//        if(cryingEntities.isEmpty() || world == null)return;
+//        if(world.getGameTime() % 3 == 0){
+//            for (Iterator<SheepEntity> i = cryingEntities.iterator(); i.hasNext();){
+//                SheepEntity sheep = i.next();
+//                Vector3d sheepLeftEyeVec = getSmoothAllEye(sheep, -0.125F);
+//                Vector3d sheepRightEyeVec = getSmoothAllEye(sheep, 0.125F);
+//                world.addParticle(ParticleTypes.FALLING_WATER,
+//                        sheepLeftEyeVec.x,
+//                        sheepLeftEyeVec.y,
+//                        sheepLeftEyeVec.z, 0, 0, 0);
+//                world.addParticle(ParticleTypes.FALLING_WATER,
+//                        sheepRightEyeVec.x,
+//                        sheepRightEyeVec.y,
+//                        sheepRightEyeVec.z, 0, 0, 0);
+//            }
+//            EntityCryHandler.makeEntityCry(cryingEntities);
+//        }
+//    }
+//
+//    @SubscribeEvent
+//    public static void onJPressed(InputEvent.KeyInputEvent event){
+//        // J key
+//        if(event.getKey() == 74 && event.getAction() == GLFW.GLFW_PRESS){
+//            sendMsg(Integer.toString(cryingEntities.size()));
+//            rayBool = !rayBool;
+//        }
+//        // K key
+////        if(event.getKey() == 75 && event.getAction() == GLFW.GLFW_PRESS){
+////            sendMsg(serverWorld.toString());
+////        }
+//        if(sheep == null)return;
+//        CustomSheepModel<?> model = (CustomSheepModel<?>) getSheepModel(sheep);
+//        if(model == null)return;
+//        if(event.getKey() == 75 && event.getAction() == GLFW.GLFW_PRESS){
+//
+//            rayTest = multiply(model.gettkt(), 0.1F);
+//            sendMsg(Float.toString(sheep.renderYawOffset));
+//
+//            rayTest = additionner(getPosVec(sheep), rotateAroundY(multiply(model.gettkt(), 0.1F), sheep.renderYawOffset));
+//        }
+//
+//        if(event.getKey() == 76 && event.getAction() == GLFW.GLFW_PRESS){
+//            model.setHeadYaw(90);
+//            sendMsg("headYaw : 90");
+//        }
+////B
+//        if(event.getKey() == 66 && event.getAction() == GLFW.GLFW_PRESS){
+//            rayTest = null;
+//        }
+//    }
+//
+//    @SubscribeEvent
+//    public static void onRenderWorldLast(RenderWorldLastEvent event){
+//        MatrixStack matrixStack = event.getMatrixStack();
+//        if(cryingEntities == null || !rayBool)return;
+//        for(Iterator<SheepEntity> i = cryingEntities.iterator(); i.hasNext();){
+//            SheepEntity sheep = i.next();
+//            Vector3d sheepPosVec = getSmoothPosVec(sheep);
+//            Vector3d sheepPosHeadVec = getSmoothPosHeadVec(sheep);
+//            Vector3d sheepLeftEyeVec = getSmoothAllEye(sheep, -1);
+//            Vector3d sheepRightEyeVec = getSmoothAllEye(sheep, 1);
+//            drawLine(matrixStack, new Vector3d(0,0,0), sheepPosVec, 1, 0, 0, 1);
+//
+//            if(rayTest != null){
+//                drawLine(matrixStack, sheepPosVec, rayTest, 1,1,0,1);
+//            }
+//            else {
+//                drawLine(matrixStack, sheepPosVec, sheepPosHeadVec, 0, 1, 0, 1);
+//                drawLine(matrixStack, sheepPosHeadVec, sheepLeftEyeVec, 0, 0, 1, 1);
+//                drawLine(matrixStack, sheepPosHeadVec, sheepRightEyeVec, 0, 0, 1, 1);
+//            }
+//        }
+//    }
 }
