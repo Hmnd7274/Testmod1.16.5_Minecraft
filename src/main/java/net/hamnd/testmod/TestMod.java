@@ -16,18 +16,15 @@ public class TestMod {
     public TestMod() {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        // Enregistre la structure via DeferredRegister
-        ModStructures.STRUCTURES.register(modBus);
-
-        // commonSetup : enregistre le Piece + patches statiques
+        ModStructures.register(modBus);
+        
         modBus.addListener(this::commonSetup);
-
-        // BiomeLoadingEvent : injecte la structure dans les biomes jungle
-        // Ce listener est sur le FORGE bus, pas le MOD bus
-        MinecraftForge.EVENT_BUS.register(new BiomeEvents());
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
-        event.enqueueWork(ModStructures::setup);
+        event.enqueueWork(() -> {
+            ModStructures.setupStructures();
+            ModConfiguredStructures.registerConfiguredStructures();
+        });
     }
 }
