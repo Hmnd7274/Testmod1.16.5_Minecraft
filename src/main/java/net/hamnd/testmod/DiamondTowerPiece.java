@@ -12,6 +12,7 @@ import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.ISeedReader;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
@@ -32,8 +33,8 @@ public class DiamondTowerPiece extends StructurePiece {
         this.centerX = centerX;
         this.centerZ = centerZ;
         this.boundingBox = new MutableBoundingBox(
-                centerX - 30, 50, centerZ - 30,
-                centerX + 30, 120, centerZ + 30);
+                centerX - 50, 50, centerZ - 50,
+                centerX + 50, 120, centerZ + 50);
     }
 
     public DiamondTowerPiece(IStructurePieceType type, CompoundNBT nbt) {
@@ -54,26 +55,28 @@ public class DiamondTowerPiece extends StructurePiece {
                                MutableBoundingBox box, ChunkPos chunkPos,
                                BlockPos pos) {
 
-        int surfaceY = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG,
-                chunkPos.x * 16 + 8, chunkPos.z * 16 + 8);
-
+        int surfaceY = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, centerX, centerZ);
+        
         // Chaque chunk nettoie ses propres arbres et lianes
-        clearTreesInBox(world, box, surfaceY, 13);
+        clearTreesInBox(world, surfaceY, 23, box);
+        TestMod.LOGGER.info("[TestMod] postProcess tour a ({}, {}, {})", centerX, surfaceY, centerZ);
+        placeDome(world, centerX, surfaceY, centerZ, 23, box);
+        SpiritTreeSpawn.spawnTree(world, rand, box, new BlockPos(centerX, surfaceY, centerZ));
 
         // Seul le chunk central place la tour
-        if (chunkPos.x == centerX >> 4 && chunkPos.z == centerZ >> 4) {
-            int towerSurfaceY = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, centerX, centerZ);
-            TestMod.LOGGER.info("[TestMod] postProcess tour a ({}, {}, {})", centerX, towerSurfaceY, centerZ);
-            placeTower(world, centerX, towerSurfaceY, centerZ);
-            placeDome(world, centerX, towerSurfaceY, centerZ, 13);
-        }
+//        if (chunkPos.x == centerX >> 4 && chunkPos.z == centerZ >> 4) {
+//            TestMod.LOGGER.info("[TestMod] postProcess tour a ({}, {}, {})", centerX, surfaceY, centerZ);
+////            placeTower(world, centerX, surfaceY, centerZ);
+//            placeDome(world, centerX, surfaceY, centerZ, 13);
+//            SpiritTreeSpawn.spawnTree(world, rand, box, new BlockPos(centerX, surfaceY, centerZ));
+//        }
 
         return true;
     }
 
     // ---- Suppression des arbres dans le chunk courant ----
 
-    private void clearTreesInBox(ISeedReader world, MutableBoundingBox box, int surfaceY, int radius) {
+    private void clearTreesInBox(ISeedReader world, int surfaceY, int radius, MutableBoundingBox box) {
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dz = -radius; dz <= radius; dz++) {
 
@@ -86,18 +89,18 @@ public class DiamondTowerPiece extends StructurePiece {
                     BlockPos base = new BlockPos(x, y, z);
                     BlockState state = world.getBlockState(base);
                     if (state.is(BlockTags.LOGS)) {
-                        fellTree(world, base);
+                        fellTree(world, base, box);
                         break;
                     }
                     if (state.getBlock() == Blocks.VINE || state.getBlock() == Blocks.COCOA) {
-                        world.setBlock(base, Blocks.AIR.defaultBlockState(), 3);
+                        placeBlock(world, base, Blocks.AIR.defaultBlockState(), box);
                     }
                 }
             }
         }
     }
 
-    private void fellTree(ISeedReader world, BlockPos start) {
+    private void fellTree(ISeedReader world, BlockPos start, MutableBoundingBox box) {
         Set<BlockPos> logs = new HashSet<>();
         Queue<BlockPos> queue = new LinkedList<>();
         queue.add(start);
@@ -115,7 +118,7 @@ public class DiamondTowerPiece extends StructurePiece {
         }
 
         for (BlockPos log : logs) {
-            world.setBlock(log, Blocks.AIR.defaultBlockState(), 3);
+            placeBlock(world, log, Blocks.AIR.defaultBlockState(), box);
         }
 
         for (BlockPos log : logs) {
@@ -124,7 +127,7 @@ public class DiamondTowerPiece extends StructurePiece {
                     for (int dz = -4; dz <= 4; dz++) {
                         BlockPos leaf = log.offset(dx, dy, dz);
                         if (world.getBlockState(leaf).is(BlockTags.LEAVES))
-                            world.setBlock(leaf, Blocks.AIR.defaultBlockState(), 3);
+                            placeBlock(world, leaf, Blocks.AIR.defaultBlockState(), box);
                     }
         }
     }
@@ -138,32 +141,32 @@ public class DiamondTowerPiece extends StructurePiece {
 
     // ---- Placement de la tour ----
 
-    private void placeTower(ISeedReader world, int x, int baseY, int z) {
+    private void placeTower(ISeedReader world, int x, int baseY, int z, MutableBoundingBox box) {
         int height = 100;
 
         for (int y = 0; y < height; y++) {
             if (y == 0 || y == height - 1) {
                 for (int dx = -1; dx <= 1; dx++)
                     for (int dz = -1; dz <= 1; dz++)
-                        world.setBlock(new BlockPos(x + dx, baseY + y, z + dz),
-                                Blocks.DIAMOND_BLOCK.defaultBlockState(), 3);
+                        placeBlock(world, new BlockPos(x + dx, baseY + y, z + dz),
+                                Blocks.DIAMOND_BLOCK.defaultBlockState(), box);
             } else {
                 for (int dx = -1; dx <= 1; dx++)
                     for (int dz = -1; dz <= 1; dz++)
                         if (Math.abs(dx) == 1 || Math.abs(dz) == 1)
-                            world.setBlock(new BlockPos(x + dx, baseY + y, z + dz),
-                                    Blocks.DIAMOND_BLOCK.defaultBlockState(), 3);
+                            placeBlock(world, new BlockPos(x + dx, baseY + y, z + dz),
+                                    Blocks.DIAMOND_BLOCK.defaultBlockState(), box);
             }
         }
 
         BlockPos top = new BlockPos(x, baseY + height, z);
-        world.setBlock(top.north(), Blocks.TORCH.defaultBlockState(), 3);
-        world.setBlock(top.south(), Blocks.TORCH.defaultBlockState(), 3);
-        world.setBlock(top.east(), Blocks.TORCH.defaultBlockState(), 3);
-        world.setBlock(top.west(), Blocks.TORCH.defaultBlockState(), 3);
+        placeBlock(world, top.north(), Blocks.TORCH.defaultBlockState(), box);
+        placeBlock(world, top.south(), Blocks.TORCH.defaultBlockState(), box);
+        placeBlock(world, top.east(), Blocks.TORCH.defaultBlockState(), box);
+        placeBlock(world, top.west(), Blocks.TORCH.defaultBlockState(), box);
     }
 
-    private void placeDome(ISeedReader world, int x, int baseY, int z, int radius) {
+    private void placeDome(ISeedReader world, int x, int baseY, int z, int radius, MutableBoundingBox box) {
 //        // Troncs qui montent du sol jusqu'au dôme — placés aléatoirement dans le cercle
 //        Random rand = new Random(x * 31L + z);
 //        int numTrunks = 8;
@@ -180,8 +183,8 @@ public class DiamondTowerPiece extends StructurePiece {
 //            int domeY = baseY + (int)Math.sqrt(Math.max(0, radius * radius - distFromCenter * distFromCenter));
 //
 //            for (int y = ty; y <= domeY; y++) {
-//                world.setBlock(new BlockPos(tx, y, tz),
-//                        Blocks.JUNGLE_LOG.defaultBlockState(), 3);
+//                placeBlock(world, new BlockPos(tx, y, tz),
+//                        Blocks.JUNGLE_LOG.defaultBlockState(), box);
 //            }
 //        }
 
@@ -216,8 +219,8 @@ public class DiamondTowerPiece extends StructurePiece {
 //                BlockPos woodPos = new BlockPos(finalX, finalY, finalZ);
 //                
 //                if (i == 0) {
-//                    world.setBlock(woodPos,
-//                            Blocks.GOLD_BLOCK.defaultBlockState(), 3);
+//                    placeBlock(world, woodPos,
+//                            Blocks.GOLD_BLOCK.defaultBlockState(), box);
 //                } else
 
                 // Vecteur relatif avant rotation
@@ -233,8 +236,8 @@ public class DiamondTowerPiece extends StructurePiece {
                 int finalZ = z + (int) rz;
                 int finalY = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, finalX, finalZ);
                 BlockPos woodPos = new BlockPos(finalX, finalY, finalZ);
-                    world.setBlock(woodPos,
-                            Blocks.REDSTONE_BLOCK.defaultBlockState(), 3);
+                    placeBlock(world, woodPos,
+                            Blocks.REDSTONE_BLOCK.defaultBlockState(), box);
 //            }
         }
 
@@ -254,8 +257,8 @@ public class DiamondTowerPiece extends StructurePiece {
 //                        && world.getBlockState(currBlockPos).getMaterial() != Material.DIRT
 //                        && world.getBlockState(currBlockPos) != Blocks.REDSTONE_BLOCK.defaultBlockState()) {
 ////                      
-//                        world.setBlock(currBlockPos,
-//                                Blocks.GLASS.defaultBlockState(), 3);
+//                        placeBlock(world, currBlockPos,
+//                                Blocks.GLASS.defaultBlockState(), box);
 //
 //                    }
 //                }
@@ -287,11 +290,16 @@ public class DiamondTowerPiece extends StructurePiece {
                     if (world.getBlockState(currBlockPos).getMaterial() != Material.DIRT
                         && world.getBlockState(currBlockPos) != Blocks.REDSTONE_BLOCK.defaultBlockState()) {
                     
-                    world.setBlock(currBlockPos,
-                            Blocks.GLASS.defaultBlockState(), 3);
+                        placeBlock(world, currBlockPos,
+                                Blocks.GLASS.defaultBlockState(), box);
+                    }
                 }
             }
         }
-        
+    }
+    
+    private void placeBlock(ISeedReader world, BlockPos pos, BlockState state, MutableBoundingBox box) {
+        if (box.isInside(pos))
+            world.setBlock(pos, state, 3);
     }
 }

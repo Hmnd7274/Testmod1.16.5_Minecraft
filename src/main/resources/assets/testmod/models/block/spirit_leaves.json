@@ -1,0 +1,6 @@
+{
+  "parent": "testmod:block/leaves",
+  "textures": {
+    "all": "testmod:block/spirit_leaves"
+  }
+}
