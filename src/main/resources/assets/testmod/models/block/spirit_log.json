@@ -1,5 +1,5 @@
 {
-  "parent": "testmod:block/cube_column",
+  "parent": "minecraft:block/cube_column",
   "textures": {
     "end": "testmod:block/spirit_log_top",
     "side": "testmod:block/spirit_log"

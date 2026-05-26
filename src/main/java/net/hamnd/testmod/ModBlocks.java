@@ -1,6 +1,5 @@
 package net.hamnd.testmod;
 
-import net.hamnd.testmod.TestMod;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
@@ -9,13 +8,11 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Direction;
-import net.minecraftforge.common.ToolType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Random;
 import java.util.function.Supplier;
 
 public class ModBlocks {
@@ -23,7 +20,7 @@ public class ModBlocks {
             DeferredRegister.create(ForgeRegistries.BLOCKS, TestMod.MOD_ID);
 
     public static final RegistryObject<Block> SPIRIT_LOG = registerBlock("spirit_log",
-            () -> log(MaterialColor.DIRT, MaterialColor.PODZOL),
+            () -> new RotatedPillarBlock(AbstractBlock.Properties.copy(Blocks.OAK_LOG)),
             ItemGroup.TAB_MISC);
 
     public static final RegistryObject<Block> SPIRIT_LEAVES = registerBlock("spirit_leaves",
