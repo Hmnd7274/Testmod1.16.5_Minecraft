@@ -11,9 +11,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, TestMod.MOD_ID);
-//
-//    public static final RegistryObject<Item> SPIRIT_LOG_ITEM = ITEMS.register("spirit_log_item",
-//            () -> new BlockItem(ModBlocks.SPIRIT_LOG.get(), (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

@@ -20,7 +20,6 @@ public class BiomeEvents {
     public static void onBiomeLoading(BiomeLoadingEvent event) {
         if (event.getCategory() == Biome.Category.JUNGLE) {
             event.getGeneration().getStructures().add(() -> ModConfiguredStructures.CONFIGURED_DIAMOND_TOWER);
-            TestMod.LOGGER.info("[TestMod] BiomeEvents working");
         }
     }
 }

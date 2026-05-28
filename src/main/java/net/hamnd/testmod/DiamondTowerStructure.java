@@ -44,19 +44,16 @@ public class DiamondTowerStructure extends Structure<NoFeatureConfig> {
         
         // Vérifie que tous les biomes dans un rayon de 80 blocs sont de la jungle
         // → garantit qu'on est au centre d'une jungle, pas sur le bord
-        for (Biome b : biomeSource.getBiomesWithin(
-                x, generator.getSeaLevel(), z, 80)) {
+        for (Biome b : biomeSource.getBiomesWithin(x, generator.getSeaLevel(), z, 80)) {
             if (b.getBiomeCategory() != Biome.Category.JUNGLE) return false;
         }
         
         BlockPos centerOfChunk = new BlockPos((chunkX << 4) + 7, 0, (chunkZ << 4) + 7);
         int surfaceY = generator.getBaseHeight(x, z, Heightmap.Type.WORLD_SURFACE_WG);
         BlockState topBlock = generator.getBaseColumn(x, z).getBlockState(centerOfChunk.above(surfaceY - 1));
-
-        if (topBlock.getFluidState().is(FluidTags.WATER)) return false;
-        TestMod.LOGGER.info("[TestMod] Found a place here, 3 = pas d'eau ? ({},{},{})", x, z, topBlock.getFluidState().isEmpty());
         
-        return topBlock.getFluidState().isEmpty();
+        // Vérifie que pas d'eau en dessous (que le bloc exact au centre)
+        return !topBlock.getFluidState().is(FluidTags.WATER) && !topBlock.getFluidState().is(FluidTags.LAVA);
     }
 
     public static class Start extends StructureStart<NoFeatureConfig> {
@@ -74,7 +71,7 @@ public class DiamondTowerStructure extends Structure<NoFeatureConfig> {
             int z = chunkZ * 16 + 8;
             this.pieces.add(new DiamondTowerPiece(ModStructures.DIAMOND_TOWER_PIECE, x, z));
             this.calculateBoundingBox();
-            TestMod.LOGGER.info("[TestMod] generatePieces, coords ({},{})", x, z);
+            TestMod.LOGGER.info("[TestMod] Structure placé en x,z: ({},{})", x, z);
         }
     }
 }

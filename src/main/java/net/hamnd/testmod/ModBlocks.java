@@ -24,11 +24,7 @@ public class ModBlocks {
             ItemGroup.TAB_MISC);
 
     public static final RegistryObject<Block> SPIRIT_LEAVES = registerBlock("spirit_leaves",
-            () -> new LeavesBlock(AbstractBlock.Properties.of(Material.LEAVES).strength(0.2F)
-                    .randomTicks().sound(SoundType.GRASS).noOcclusion()
-                    .isValidSpawn((a, b, c, entity) -> entity == EntityType.OCELOT || entity == EntityType.PARROT)
-                    .isSuffocating((a, b, c) -> false)
-                    .isViewBlocking((a, b, c) -> false)),
+            () -> new LeavesBlock(AbstractBlock.Properties.copy(Blocks.JUNGLE_LEAVES)),
             ItemGroup.TAB_MISC);
 
     private static <T extends Block>RegistryObject<T> registerBlock(String name, Supplier<T> block, ItemGroup tab) {
@@ -37,16 +33,7 @@ public class ModBlocks {
         return toReturn;
     }
 
-    private static RotatedPillarBlock log(MaterialColor p_235430_0_, MaterialColor p_235430_1_) {
-        return new RotatedPillarBlock(AbstractBlock.Properties.of(Material.WOOD,
-                (p_235431_2_) ->
-                        p_235431_2_.getValue(RotatedPillarBlock.AXIS) ==
-                                Direction.Axis.Y ? p_235430_0_
-                                : p_235430_1_).strength(2.0F).sound(SoundType.WOOD));
-    }
-
     private static <T extends Block> RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block, ItemGroup tab) {
-
         return ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties().tab(tab)));
     }
 

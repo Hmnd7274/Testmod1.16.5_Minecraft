@@ -1,9 +1,12 @@
 package net.hamnd.testmod;
 
+import net.hamnd.testmod.world.gen.feature.ModConfiguredFeatures;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
@@ -28,7 +31,7 @@ public class DiamondTowerPiece extends StructurePiece {
     private final int centerX;
     private final int centerZ;
 
-    public DiamondTowerPiece(IStructurePieceType type, int centerX, int centerZ) {
+    public DiamondTowerPiece(IStructurePieceType type, int centerX, int centerZ, Set<Tuple<BlockPos, BlockState>> blockList) {
         super(type, 0);
         this.centerX = centerX;
         this.centerZ = centerZ;
@@ -37,7 +40,7 @@ public class DiamondTowerPiece extends StructurePiece {
                 centerX + 50, 120, centerZ + 50);
     }
 
-    public DiamondTowerPiece(IStructurePieceType type, CompoundNBT nbt) {
+    public DiamondTowerPiece(IStructurePieceType type, CompoundNBT nbt, Set<Tuple<BlockPos, BlockState>> blockList) {
         super(type, nbt);
         this.centerX = nbt.getInt("CX");
         this.centerZ = nbt.getInt("CZ");
@@ -47,6 +50,7 @@ public class DiamondTowerPiece extends StructurePiece {
     protected void addAdditionalSaveData(CompoundNBT nbt) {
         nbt.putInt("CX", centerX);
         nbt.putInt("CZ", centerZ);
+        
     }
 
     @Override
@@ -56,25 +60,16 @@ public class DiamondTowerPiece extends StructurePiece {
                                BlockPos pos) {
 
         int surfaceY = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, centerX, centerZ);
+        TestMod.LOGGER.info("[TestMod] StructurePiece placé à x,y,z: ({}, {}, {})", centerX, surfaceY, centerZ);
         
-        // Chaque chunk nettoie ses propres arbres et lianes
+        Random fixedRandom = new Random(centerX + 67L + centerZ);
+        
+        // Chaque chunk nettoie ses propres arbres et lianes, rayon 23 blocs
         clearTreesInBox(world, surfaceY, 23, box);
-        TestMod.LOGGER.info("[TestMod] postProcess tour a ({}, {}, {})", centerX, surfaceY, centerZ);
-        placeDome(world, centerX, surfaceY, centerZ, 23, box);
-        SpiritTreeSpawn.spawnTree(world, rand, box, new BlockPos(centerX, surfaceY, centerZ));
-
-        // Seul le chunk central place la tour
-//        if (chunkPos.x == centerX >> 4 && chunkPos.z == centerZ >> 4) {
-//            TestMod.LOGGER.info("[TestMod] postProcess tour a ({}, {}, {})", centerX, surfaceY, centerZ);
-////            placeTower(world, centerX, surfaceY, centerZ);
-//            placeDome(world, centerX, surfaceY, centerZ, 13);
-//            SpiritTreeSpawn.spawnTree(world, rand, box, new BlockPos(centerX, surfaceY, centerZ));
-//        }
+        SpiritTreeSpawn.spawnTree(world, fixedRandom, box, new BlockPos(centerX, surfaceY, centerZ));
 
         return true;
     }
-
-    // ---- Suppression des arbres dans le chunk courant ----
 
     private void clearTreesInBox(ISeedReader world, int surfaceY, int radius, MutableBoundingBox box) {
         for (int dx = -radius; dx <= radius; dx++) {
@@ -138,168 +133,10 @@ public class DiamondTowerPiece extends StructurePiece {
                 pos.above(), pos.below()
         );
     }
-
-    // ---- Placement de la tour ----
-
-    private void placeTower(ISeedReader world, int x, int baseY, int z, MutableBoundingBox box) {
-        int height = 100;
-
-        for (int y = 0; y < height; y++) {
-            if (y == 0 || y == height - 1) {
-                for (int dx = -1; dx <= 1; dx++)
-                    for (int dz = -1; dz <= 1; dz++)
-                        placeBlock(world, new BlockPos(x + dx, baseY + y, z + dz),
-                                Blocks.DIAMOND_BLOCK.defaultBlockState(), box);
-            } else {
-                for (int dx = -1; dx <= 1; dx++)
-                    for (int dz = -1; dz <= 1; dz++)
-                        if (Math.abs(dx) == 1 || Math.abs(dz) == 1)
-                            placeBlock(world, new BlockPos(x + dx, baseY + y, z + dz),
-                                    Blocks.DIAMOND_BLOCK.defaultBlockState(), box);
-            }
-        }
-
-        BlockPos top = new BlockPos(x, baseY + height, z);
-        placeBlock(world, top.north(), Blocks.TORCH.defaultBlockState(), box);
-        placeBlock(world, top.south(), Blocks.TORCH.defaultBlockState(), box);
-        placeBlock(world, top.east(), Blocks.TORCH.defaultBlockState(), box);
-        placeBlock(world, top.west(), Blocks.TORCH.defaultBlockState(), box);
-    }
-
-    private void placeDome(ISeedReader world, int x, int baseY, int z, int radius, MutableBoundingBox box) {
-//        // Troncs qui montent du sol jusqu'au dôme — placés aléatoirement dans le cercle
-//        Random rand = new Random(x * 31L + z);
-//        int numTrunks = 8;
-//        for (int i = 0; i < numTrunks; i++) {
-//            // Position aléatoire dans le cercle
-//            double angle = rand.nextDouble() * Math.PI * 2;
-//            int dist = 8 + rand.nextInt(10); // entre 8 et 18 blocs du centre
-//            int tx = x + (int)(Math.cos(angle) * dist);
-//            int tz = z + (int)(Math.sin(angle) * dist);
-//            int ty = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, tx, tz);
-//
-//            // Monte jusqu'à la hauteur du dôme à cette distance
-//            double distFromCenter = Math.sqrt((tx - x) * (tx - x) + (tz - z) * (tz - z));
-//            int domeY = baseY + (int)Math.sqrt(Math.max(0, radius * radius - distFromCenter * distFromCenter));
-//
-//            for (int y = ty; y <= domeY; y++) {
-//                placeBlock(world, new BlockPos(tx, y, tz),
-//                        Blocks.JUNGLE_LOG.defaultBlockState(), box);
-//            }
-//        }
-
-        //Pics
-        List<Tuple<Integer, Integer>> leafList = Arrays.asList(
-                new Tuple<>(0, 0),            // haut, droite
-                new Tuple<>(1, 0),
-                new Tuple<>(0, 1),
-                new Tuple<>(0, -1)
-        );
-        Random rand = new Random(x * 67L + z);
-        float baseAngle = rand.nextFloat() * ((float) Math.PI * 2F);
-        
-        for (int w = 0; w < 8; w++) {
-            float spacing = ((float)(2 * Math.PI) / 8) * w;
-            float angle = baseAngle + spacing;
-//
-//            for (int i = 0; i<leafList.size(); i++) {
-//
-//                // Vecteur relatif avant rotation
-//                float vx = radius + leafList.get(i).getA();
-//                float vz = leafList.get(i).getB();
-//
-//                // Applique la rotation
-//                float rx = vx * (float) Math.cos(angle) - vz * (float) Math.sin(angle);
-//                float rz = vx * (float) Math.sin(angle) + vz * (float) Math.cos(angle);
-//
-//                // Ajoute le centre
-//                int finalX = x + (int) rx;
-//                int finalZ = z + (int) rz;
-//                int finalY = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, finalX, finalZ);
-//                BlockPos woodPos = new BlockPos(finalX, finalY, finalZ);
-//                
-//                if (i == 0) {
-//                    placeBlock(world, woodPos,
-//                            Blocks.GOLD_BLOCK.defaultBlockState(), box);
-//                } else
-
-                // Vecteur relatif avant rotation
-                float vx = radius - 1;
-                float vz = 0;
-
-                // Applique la rotation
-                float rx = vx * (float) Math.cos(angle) - vz * (float) Math.sin(angle);
-                float rz = vx * (float) Math.sin(angle) + vz * (float) Math.cos(angle);
-
-                // Ajoute le centre
-                int finalX = x + (int) rx;
-                int finalZ = z + (int) rz;
-                int finalY = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, finalX, finalZ);
-                BlockPos woodPos = new BlockPos(finalX, finalY, finalZ);
-                    placeBlock(world, woodPos,
-                            Blocks.REDSTONE_BLOCK.defaultBlockState(), box);
-//            }
-        }
-
-        // Dôme de feuilles — place un bloc si il est dans la sphère
-        // ET qu'au moins un voisin est hors de la sphère (= surface)
-//        for (int dx = -20; dx <= 20; dx++) {
-//            for (int dy = 0; dy <= 4; dy++) {
-//                for (int dz = -20; dz <= 20; dz++) {
-//                    int dist = (dx * dx) + ((dy + 4) * (dy + 4)) + (dz * dz);
-//                    int radiusSquared = radius*radius;
-//                    int finalX = x + dx;
-//                    int finalZ = z + dz;
-//                    int finalY = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, finalX, finalZ) + dy;
-//                    
-//                    BlockPos currBlockPos = new BlockPos(finalX, finalY, finalZ);
-//                    if (dist <= radiusSquared + 20 && dist >= radiusSquared - 20
-//                        && world.getBlockState(currBlockPos).getMaterial() != Material.DIRT
-//                        && world.getBlockState(currBlockPos) != Blocks.REDSTONE_BLOCK.defaultBlockState()) {
-////                      
-//                        placeBlock(world, currBlockPos,
-//                                Blocks.GLASS.defaultBlockState(), box);
-//
-//                    }
-//                }
-//            }
-//        }
-
-        for (int w = 0; w < 8; w++) {
-            float angle = baseAngle + ((float)(2 * Math.PI) / 8) * w;
-
-            // Chaque pic va du bord (radius) vers le centre (0)
-            // en montant progressivement
-            for (int dist = radius; dist >= 0; dist--) {
-                int height = (radius - dist) / 3; // monte de 1 bloc tous les 3 blocs vers le centre
-
-                // Largeur du pic — plus large à la base, plus fin au centre
-                int width = dist / 6;
-
-                for (int dw = -width; dw <= width; dw++) {
-                    // Vecteur principal
-                    float vx = dist;
-                    float vz = dw; // élargit perpendiculairement au bras
-
-                    // Rotation
-                    int finalX = x + (int)(vx * Math.cos(angle) - vz * Math.sin(angle));
-                    int finalZ = z + (int)(vx * Math.sin(angle) + vz * Math.cos(angle));
-                    int finalY = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, finalX, finalZ) + height;
-                    BlockPos currBlockPos = new BlockPos(finalX, finalY, finalZ);
-                    
-                    if (world.getBlockState(currBlockPos).getMaterial() != Material.DIRT
-                        && world.getBlockState(currBlockPos) != Blocks.REDSTONE_BLOCK.defaultBlockState()) {
-                    
-                        placeBlock(world, currBlockPos,
-                                Blocks.GLASS.defaultBlockState(), box);
-                    }
-                }
-            }
-        }
-    }
     
     private void placeBlock(ISeedReader world, BlockPos pos, BlockState state, MutableBoundingBox box) {
-        if (box.isInside(pos))
-            world.setBlock(pos, state, 3);
+        if (box.isInside(pos)) {
+            world.setBlock(pos, state, 2);
+        }
     }
 }

@@ -50,8 +50,8 @@ public class CustomTrunkPlacer extends AbstractTrunkPlacer {
     public List<FoliagePlacer.Foliage> placeTrunk(IWorldGenerationReader world, Random rand, int height,
                                                   BlockPos pos, Set<BlockPos> trunkBlocks,
                                                   MutableBoundingBox bbox, BaseTreeFeatureConfig config) {
-//        return placeTree(world, rand, height, pos, trunkBlocks, bbox, config);
-        return SpiritTreeSpawn.spawnTreeCommand((ISeedReader) world, rand, height, pos, trunkBlocks, bbox, config);
+        return placeTree(world, rand, height, pos, trunkBlocks, bbox, config);
+//        return SpiritTreeSpawn.spawnTreeCommand((ISeedReader) world, rand, height, pos, trunkBlocks, bbox, config);
     }
     
     public List<FoliagePlacer.Foliage> placeTree(IWorldGenerationReader world, Random rand, int height,
