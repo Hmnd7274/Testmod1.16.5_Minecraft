@@ -31,7 +31,7 @@ public class DiamondTowerPiece extends StructurePiece {
     private final int centerX;
     private final int centerZ;
 
-    public DiamondTowerPiece(IStructurePieceType type, int centerX, int centerZ, Set<Tuple<BlockPos, BlockState>> blockList) {
+    public DiamondTowerPiece(IStructurePieceType type, int centerX, int centerZ) {
         super(type, 0);
         this.centerX = centerX;
         this.centerZ = centerZ;
@@ -40,7 +40,7 @@ public class DiamondTowerPiece extends StructurePiece {
                 centerX + 50, 120, centerZ + 50);
     }
 
-    public DiamondTowerPiece(IStructurePieceType type, CompoundNBT nbt, Set<Tuple<BlockPos, BlockState>> blockList) {
+    public DiamondTowerPiece(IStructurePieceType type, CompoundNBT nbt) {
         super(type, nbt);
         this.centerX = nbt.getInt("CX");
         this.centerZ = nbt.getInt("CZ");
@@ -66,7 +66,7 @@ public class DiamondTowerPiece extends StructurePiece {
         
         // Chaque chunk nettoie ses propres arbres et lianes, rayon 23 blocs
         clearTreesInBox(world, surfaceY, 23, box);
-        SpiritTreeSpawn.spawnTree(world, fixedRandom, box, new BlockPos(centerX, surfaceY, centerZ));
+        SpiritTreeSpawn.spawnTree(world, fixedRandom, box, new BlockPos(centerX, surfaceY, centerZ), 14);
 
         return true;
     }
