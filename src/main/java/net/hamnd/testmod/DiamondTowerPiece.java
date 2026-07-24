@@ -66,7 +66,7 @@ public class DiamondTowerPiece extends StructurePiece {
         
         // Chaque chunk nettoie ses propres arbres et lianes, rayon 23 blocs
         clearTreesInBox(world, surfaceY, 23, box);
-        SpiritTreeSpawn.spawnTree(world, fixedRandom, box, new BlockPos(centerX, surfaceY, centerZ), 14);
+        SpiritTreeSpawn.spawnTree(world, fixedRandom, box, new BlockPos(centerX, surfaceY, centerZ), 14, 4);
 
         return true;
     }
