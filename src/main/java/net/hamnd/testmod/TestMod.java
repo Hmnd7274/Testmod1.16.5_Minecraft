@@ -3,6 +3,7 @@ package net.hamnd.testmod;
 import net.hamnd.testmod.commands.ModCommands;
 import net.hamnd.testmod.world.gen.trunkplacer.ModTrunkPlacerTypes;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.world.FoliageColors;
@@ -28,6 +29,7 @@ public class TestMod {
 
         ModItems.register(modBus);
         ModBlocks.register(modBus);
+        ModTileEntities.register(modBus);
         ModStructures.register(modBus);
 
         ModTrunkPlacerTypes.registerTrunkPlacers();
@@ -57,5 +59,13 @@ public class TestMod {
                         BiomeColors.getAverageFoliageColor(world, pos),
                 ModBlocks.SPIRIT_LEAVES.get()
         );
+    }
+    
+    public static void sendMessage(String text) {
+        if (Minecraft.getInstance().player == null) {
+            LOGGER.info("player is null");
+            return;
+        }
+        Minecraft.getInstance().player.chat(text);
     }
 }
