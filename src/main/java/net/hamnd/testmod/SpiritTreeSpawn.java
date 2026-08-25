@@ -9,12 +9,12 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.IWorldGenerationBaseReader;
-import net.minecraft.world.gen.IWorldGenerationReader;
 import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.foliageplacer.BlobFoliagePlacer;
@@ -47,15 +47,20 @@ public class SpiritTreeSpawn{
             new BlockPos(-1,0,1),
             new BlockPos(-1,0,-1)
     );
-    
+
+    private static int nextId = 0;
+    private static int getNewTreeDataIndex() {
+        nextId++;
+        return nextId;
+    }
 //    public static final BlockState logState = ModBlocks.SPIRIT_LOG.get().defaultBlockState();
 //    public static final BlockState leaveState = ModBlocks.SPIRIT_LEAVES.get().defaultBlockState();
 
 //    private static List<BlockPos> trunkBlocks = Collections.emptyList();
 //    private static List<BlockPos> trunkLeaves = Collections.emptyList();
 
-    private static BlockState getLogState() {
-        return ModBlocks.SPIRIT_LOG.get().defaultBlockState();
+    private static BlockState getLogState(SpiritualLogBlock.TreeParts part) {
+        return ModBlocks.SPIRIT_LOG.get().defaultBlockState().setValue(SpiritualLogBlock.PART, part);
     }
 
     private static BlockState getLeaveState() {
@@ -69,10 +74,11 @@ public class SpiritTreeSpawn{
         int foliageHeight = 3;
         Set<BlockPos> vineSetFoliage = Sets.newHashSet(); // placeLeavesRow() -> tous les blocs de feuilles
         Set<BlockPos> vineSetTrunk = Sets.newHashSet(); // placeTrunk() -> tous les blocs de log
-        Set<BlockPos> setTrunk = Sets.newHashSet();
+        Set<Tuple<BlockPos, Block>> allBlocks = new HashSet<>();
+        
         BlobFoliagePlacer myBlobFolPlacer = new BlobFoliagePlacer(FeatureSpread.fixed(2), FeatureSpread.fixed(0), foliageHeight);
         BaseTreeFeatureConfig baseTreeFeatureConfig = new BaseTreeFeatureConfig.Builder(
-                new SimpleBlockStateProvider(getLogState()),
+                new SimpleBlockStateProvider(getLogState(SpiritualLogBlock.TreeParts.UK)),
                 new SimpleBlockStateProvider(getLeaveState()),
                 new JungleFoliagePlacer(
                         FeatureSpread.fixed(3),
@@ -84,7 +90,7 @@ public class SpiritTreeSpawn{
         ).decorators(ImmutableList.of(TrunkVineTreeDecorator.INSTANCE, LeaveVineTreeDecorator.INSTANCE)).build();
         
         // Place tronc, branches, racines, et récupère les foliage positions
-        getFoliages(world, rand, pos, vineSetTrunk, setTrunk, treeHeight, branch)
+        getFoliage(world, rand, pos, vineSetTrunk, allBlocks, treeHeight, branch)
                 .forEach((foliage) -> {
                     myBlobFolPlacer.createFoliage(world, rand, baseTreeFeatureConfig, treeHeight, foliage,
                             myBlobFolPlacer.foliageRadius(rand, 0), foliageHeight, vineSetFoliage, box); // le 0 du foliage radius sert à rien il n'est pas utilisé par blob...
@@ -95,21 +101,36 @@ public class SpiritTreeSpawn{
             treeDecorator.place(world, rand, Lists.newArrayList(vineSetTrunk), Lists.newArrayList(vineSetFoliage), new HashSet<>(), box);
         });
         TestMod.LOGGER.info("[TestMod] SpiritTree generated at: {}; {}; {}", pos.getX(), pos.getY(), pos.getZ());
-        CutsceneHandler.testdebugtreepos = vineSetTrunk;
+        Set<Tuple<BlockPos, SpiritualLogBlock.TreeParts>> setLogs = Sets.newHashSet();
+        vineSetTrunk.forEach(position -> setLogs.add(new Tuple<>(position, world.getBlockState(position).getValue(SpiritualLogBlock.PART))));
+        CutsceneHandler.debugLogsPos = setLogs;
+
+        vineSetTrunk.forEach(position -> allBlocks.add(new Tuple<>(position, world.getBlockState(position).getBlock())));
+        vineSetFoliage.forEach(position -> allBlocks.add(new Tuple<>(position, world.getBlockState(position).getBlock())));
+        CutsceneHandler.treeBlocks = allBlocks;
     }
     
-    public static List<JungleFoliagePlacer.Foliage> getFoliages(ISeedReader world, Random rand, BlockPos pos,
-                                                                Set<BlockPos> vineSetTrunk, Set<BlockPos> setTrunk, int treeHeight, int branch) {
+    public static List<JungleFoliagePlacer.Foliage> getFoliage(ISeedReader world, Random rand, BlockPos pos,
+                                                               Set<BlockPos> vineSetTrunk, Set<Tuple<BlockPos, Block>> allBlocks, int treeHeight, int branch) {
         
         List<JungleFoliagePlacer.Foliage> foliagePlacerList = Lists.newArrayList();
-
+        
+        TreeData treeData = new TreeData();
+        int treeDataId = getNewTreeDataIndex();
+        treeData.cutsceneBlocks = allBlocks;
+        
         // 1️⃣ Générer le tronc principal
         for (int y = 0; y < treeHeight; y++) {
             BlockPos logPos = pos.above(y);
+            
+            treeData.remainingPerLayer.put(logPos.getY(), 9);
+            
             for (BlockPos trunkOffset : trunkOffsets) {
-                placeLog(world, logPos.offset(trunkOffset), getLogState(), vineSetTrunk); // pose un bloc de bois
-                setTrunk.add(logPos.offset(trunkOffset));
+                BlockPos newPos = logPos.offset(trunkOffset);
+                placeLog(world, newPos, getLogState(SpiritualLogBlock.TreeParts.TRUNK), vineSetTrunk); // pose un bloc de bois
+                ((SpiritualLogBlock.SpiritualLogTileEntity) world.getBlockEntity(newPos)).setTreeId(treeDataId);
             }
+            TreeSaveData.get(world.getLevel()).registerNewTree(treeDataId, treeData);
         }
 
         // Générer les raçines
@@ -208,7 +229,7 @@ public class SpiritTreeSpawn{
 //            BlockPos pos = new BlockPos(Math.round(x), Math.round(y), Math.round(z));
             pos = new BlockPos(px, py, pz);
             if (!canGoUnderground && !isReplaceableAtCustom(world, pos)) {
-                pos = moveUpToSurface(world, pos);
+                pos = moveToSurface(world, pos);
             }
             // si true et encore des blocks à descendre, descendre
             if (needGoDown && rootGoDownNumber > 0) {
@@ -217,7 +238,7 @@ public class SpiritTreeSpawn{
 //                Calculator.sendMsg("OMG DOWN = " + pos);
             }
 
-            BlockState rotatedLogState = getLogState(start, end);
+            BlockState rotatedLogState = getLogState(start, end, SpiritualLogBlock.TreeParts.ROOT);
             placeLog(world, pos, rotatedLogState, vineSetTrunk);
 
             x += xStep;
@@ -470,7 +491,7 @@ public class SpiritTreeSpawn{
         float y = start.getY();
         float z = start.getZ();
 
-        BlockState rotatedLogState = getLogState(start, end);
+        BlockState rotatedLogState = getLogState(start, end, SpiritualLogBlock.TreeParts.BRANCH);
 
         for (int i = 0; i < steps; i++) {
             BlockPos pos = new BlockPos(Math.round(x), Math.round(y), Math.round(z));
@@ -546,7 +567,7 @@ public class SpiritTreeSpawn{
     /**
      * Retourne le BlockState d'une bûche orientée selon la direction start → end
      */
-    public static BlockState getLogState(BlockPos start, BlockPos end) {
+    public static BlockState getLogState(BlockPos start, BlockPos end, SpiritualLogBlock.TreeParts part) {
         int dx = MathHelper.abs(end.getX() - start.getX());
         int dy = MathHelper.abs(end.getY() - start.getY());
         int dz = MathHelper.abs(end.getZ() - start.getZ());
@@ -557,12 +578,12 @@ public class SpiritTreeSpawn{
         if (max == dx) axis = Direction.Axis.X;  // horizontale selon X
         if (max == dy) axis = Direction.Axis.Y;  // horizontale selon Y
 
-        return getLogState().setValue(RotatedPillarBlock.AXIS, axis);
+        return getLogState(part).setValue(RotatedPillarBlock.AXIS, axis);
     }
 
 
     private static void placeLog(ISeedReader world, BlockPos pos, BlockState state, Set<BlockPos> vineSetTrunk) {
-        if (world.getBlockState(pos) != ModBlocks.SPIRIT_LOG.get().defaultBlockState()) {
+        if (world.getBlockState(pos).getBlock() != ModBlocks.SPIRIT_LOG.get()) {
             world.setBlock(pos, state, 3);
             vineSetTrunk.add(pos);
         }
@@ -593,7 +614,7 @@ public class SpiritTreeSpawn{
         return reader.isStateAtPosition(pos, (state) -> state.is(Blocks.WATER));
     }
 
-    public static BlockPos moveUpToSurface(IWorldGenerationReader world, BlockPos pos) {
+    public static BlockPos moveToSurface(ISeedReader world, BlockPos pos) {
         BlockPos.Mutable mutable = pos.mutable();
 
         // climb up until we find air

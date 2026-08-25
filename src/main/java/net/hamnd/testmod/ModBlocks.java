@@ -20,7 +20,7 @@ public class ModBlocks {
             DeferredRegister.create(ForgeRegistries.BLOCKS, TestMod.MOD_ID);
 
     public static final RegistryObject<Block> SPIRIT_LOG = registerBlock("spirit_log",
-            () -> new RotatedPillarBlock(AbstractBlock.Properties.copy(Blocks.OAK_LOG)),
+            () -> new SpiritualLogBlock(AbstractBlock.Properties.copy(Blocks.OAK_LOG)),
             ItemGroup.TAB_MISC);
 
     public static final RegistryObject<Block> SPIRIT_LEAVES = registerBlock("spirit_leaves",
