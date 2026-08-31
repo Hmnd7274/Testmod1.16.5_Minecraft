@@ -90,7 +90,7 @@ public class SpiritTreeSpawn{
         ).decorators(ImmutableList.of(TrunkVineTreeDecorator.INSTANCE, LeaveVineTreeDecorator.INSTANCE)).build();
         
         // Place tronc, branches, racines, et récupère les foliage positions
-        getFoliage(world, rand, pos, vineSetTrunk, allBlocks, treeHeight, branch)
+        getFoliages(world, rand, pos, vineSetTrunk, treeHeight, branch)
                 .forEach((foliage) -> {
                     myBlobFolPlacer.createFoliage(world, rand, baseTreeFeatureConfig, treeHeight, foliage,
                             myBlobFolPlacer.foliageRadius(rand, 0), foliageHeight, vineSetFoliage, box); // le 0 du foliage radius sert à rien il n'est pas utilisé par blob...
@@ -110,14 +110,13 @@ public class SpiritTreeSpawn{
         CutsceneHandler.treeBlocks = allBlocks;
     }
     
-    public static List<JungleFoliagePlacer.Foliage> getFoliage(ISeedReader world, Random rand, BlockPos pos,
-                                                               Set<BlockPos> vineSetTrunk, Set<Tuple<BlockPos, Block>> allBlocks, int treeHeight, int branch) {
+    public static List<JungleFoliagePlacer.Foliage> getFoliages(ISeedReader world, Random rand, BlockPos pos,
+                                                                Set<BlockPos> vineSetTrunk, int treeHeight, int branch) {
         
         List<JungleFoliagePlacer.Foliage> foliagePlacerList = Lists.newArrayList();
-        
+
         TreeData treeData = new TreeData();
         int treeDataId = getNewTreeDataIndex();
-        treeData.cutsceneBlocks = allBlocks;
         
         // 1️⃣ Générer le tronc principal
         for (int y = 0; y < treeHeight; y++) {
