@@ -89,7 +89,8 @@ public class SpiritualLogBlock extends RotatedPillarBlock implements ITileEntity
         }
         
         public void setTreeId(int id) {
-            this.treeId = id; setChanged();
+            this.treeId = id;
+            setChanged();
         }
 
         @Override

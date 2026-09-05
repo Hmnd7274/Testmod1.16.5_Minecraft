@@ -47,12 +47,7 @@ public class SpiritTreeSpawn{
             new BlockPos(-1,0,1),
             new BlockPos(-1,0,-1)
     );
-
-    private static int nextId = 0;
-    private static int getNewTreeDataIndex() {
-        nextId++;
-        return nextId;
-    }
+    
 //    public static final BlockState logState = ModBlocks.SPIRIT_LOG.get().defaultBlockState();
 //    public static final BlockState leaveState = ModBlocks.SPIRIT_LEAVES.get().defaultBlockState();
 
@@ -116,7 +111,7 @@ public class SpiritTreeSpawn{
         List<JungleFoliagePlacer.Foliage> foliagePlacerList = Lists.newArrayList();
 
         TreeData treeData = new TreeData();
-        int treeDataId = getNewTreeDataIndex();
+        int treeDataId = TreeSaveData.getNewTreeDataIndex();
         
         // 1️⃣ Générer le tronc principal
         for (int y = 0; y < treeHeight; y++) {

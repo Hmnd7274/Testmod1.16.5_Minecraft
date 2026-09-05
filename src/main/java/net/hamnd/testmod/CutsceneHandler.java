@@ -52,6 +52,9 @@ public class CutsceneHandler {
     public static void triggerCutscene(World world, BlockPos scenePosition, Set<Tuple<BlockPos, Block>> allBlocks) {
         TestMod.LOGGER.info("Cutscene Triggered");
         CutsceneOn = true;
+        countdown = 180;
+        // setInitalCamPos();
+//        InputDesactivator.setInputsDisabled(true, Minecraft.getInstance().player);
         width = 0;
         centerPos = new Vector3d(scenePosition.getX(), scenePosition.getY(), scenePosition.getZ());
         treeBlocks = allBlocks.stream().filter((tuple) -> tuple.getA().getY() > scenePosition.getY()).collect(Collectors.toSet());
@@ -70,7 +73,6 @@ public class CutsceneHandler {
         z = Math.sin(angle) * radius;
         pos = new Vector3d(centerPos.x + x, centerPos.y + 1, centerPos.z + z);
         rot = new Rotations(angleRot + 90, 20, 0);
-        TestMod.LOGGER.info("angle " + angle);
         event.getInfo().setPosition(pos);
         event.setYaw(rot.getX());
         event.setPitch(rot.getY());
@@ -109,8 +111,10 @@ public class CutsceneHandler {
     public static void onTick(TickEvent.ClientTickEvent event) {
         if (countdown > 0)
             countdown -= 1;
-        else
+        else {
             InputDesactivator.setInputsDisabled(false, null);
+            CutsceneOn = false;
+        }
     }
 
     private static final IRenderTypeBuffer.Impl PERSISTENT_BUFFER =

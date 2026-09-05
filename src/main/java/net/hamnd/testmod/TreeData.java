@@ -18,7 +18,7 @@ public class TreeData {
     public boolean triggered = false;
     
     public void triggerCutscene(World world, BlockPos scenePosition) {
-//        if (triggered) return;
+        if (triggered) return;
         triggered = true;
         CutsceneHandler.triggerCutscene(world, scenePosition, cutsceneBlocks);
     }
