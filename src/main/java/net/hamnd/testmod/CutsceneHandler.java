@@ -34,6 +34,7 @@ public class CutsceneHandler {
     public static boolean CutsceneOn = false;
     public static Set<Tuple<BlockPos, SpiritualLogBlock.TreeParts>> debugLogsPos = Sets.newHashSet();
     public static Set<Tuple<BlockPos, Block>> treeBlocks = Sets.newHashSet();
+    public static Set<BlockPos> trunkLogs = Sets.newHashSet();
     
     public static double radius = 10.0;
     public static double angle = 0.0;
@@ -43,6 +44,8 @@ public class CutsceneHandler {
 
     public static Vector3d centerPos = new Vector3d(x, 100, z);
     public static Vector3d pos = new Vector3d(x, 100, z);
+    
+    private static int height = 0;
     /**
      * Yaw, Pitch, Roll
      */
@@ -51,8 +54,8 @@ public class CutsceneHandler {
 
     public static void triggerCutscene(World world, BlockPos scenePosition, Set<Tuple<BlockPos, Block>> allBlocks) {
         TestMod.LOGGER.info("Cutscene Triggered");
-        CutsceneOn = true;
-        countdown = 180;
+//        CutsceneOn = true;
+//        countdown = 180;
         // setInitalCamPos();
 //        InputDesactivator.setInputsDisabled(true, Minecraft.getInstance().player);
         width = 0;
@@ -93,18 +96,24 @@ public class CutsceneHandler {
     private static int countdown = 0;
 
     @SubscribeEvent
-    public static void F(GuiScreenEvent.KeyboardKeyEvent event){
-        if (event.getKeyCode() != GLFW.GLFW_KEY_F) return;
-        TestMod.LOGGER.info("F PRESSED");
+    public static void F(InputEvent.KeyInputEvent event){
+        if (event.getKey() != GLFW.GLFW_KEY_F || event.getAction() != GLFW.GLFW_PRESS) return;
+        TestMod.sendMessage("F PRESSED");
         InputDesactivator.setInputsDisabled(true, Minecraft.getInstance().player);
         countdown = 180;
     }
 
     @SubscribeEvent
-    public static void G(GuiScreenEvent.KeyboardKeyEvent event){
-        if (event.getKeyCode() != GLFW.GLFW_KEY_G) return;
-        TestMod.LOGGER.info("G PRESSED");
-        CutsceneOn = false;
+    public static void G(InputEvent.KeyInputEvent event){
+        if (event.getKey() != GLFW.GLFW_KEY_G || event.getAction() != GLFW.GLFW_PRESS) return;
+        TestMod.sendMessage("G PRESSED");
+        if (!isFalling) {
+            testangle = 0;
+            treeFall(Minecraft.getInstance().level, treeBlocks);
+            pivot = Minecraft.getInstance().player.blockPosition();
+            height = pivot.getY();
+        } else
+            isFalling = false;
     }
     
     @SubscribeEvent
@@ -139,7 +148,7 @@ public class CutsceneHandler {
 
     private static void treeFall(World world, Set<Tuple<BlockPos, Block>> blocks) {
         blocks.forEach((tuple) -> {
-            world.setBlock(tuple.getA(), Blocks.AIR.defaultBlockState(), 3);
+            world.removeBlock(tuple.getA(), false);;
         });
         isFalling = true;
     }
@@ -149,7 +158,7 @@ public class CutsceneHandler {
         BlockRendererDispatcher dispatcher = mc.getBlockRenderer();
 
         matrixStack.pushPose();
-        testangle += 1.0f; // fait tourner petit à petit, incrémente à chaque frame
+        testangle += 0.1f; // fait tourner petit à petit, incrémente à chaque frame
 
         // 1. Se placer au pivot dans le monde (caméra-relatif)
         matrixStack.translate(pivot.getX() - camPos.x, pivot.getY() - camPos.y, pivot.getZ() - camPos.z);
@@ -159,7 +168,7 @@ public class CutsceneHandler {
 
         // 3. Dessiner chaque bloc à sa position relative au pivot (pas de rotation individuelle !)
         for (Tuple<BlockPos, Block> tuple : treeBlocks) {
-            BlockState state = Blocks.GOLD_BLOCK.defaultBlockState(); // ou une state stockée si le vrai bloc a déjà été retiré
+            BlockState state = tuple.getB().defaultBlockState(); // ou une state stockée si le vrai bloc a déjà été retiré
             BlockPos worldPos = tuple.getA();
             
             matrixStack.pushPose();
@@ -260,7 +269,7 @@ public class CutsceneHandler {
         PERSISTENT_BUFFER.endBatch(RenderType.lines());
     }
 
-    private static final BlockPos pivot = new BlockPos(0, 100, 0);
+    private static BlockPos pivot = new BlockPos(0, 100, 0);
     private static final List<BlockPos> testBlocks = Lists.newArrayList(
             pivot,
             pivot.above(),

@@ -69,6 +69,7 @@ public class SpiritTreeSpawn{
         int foliageHeight = 3;
         Set<BlockPos> vineSetFoliage = Sets.newHashSet(); // placeLeavesRow() -> tous les blocs de feuilles
         Set<BlockPos> vineSetTrunk = Sets.newHashSet(); // placeTrunk() -> tous les blocs de log
+        Set<BlockPos> trunkLogs = Sets.newHashSet(); // placeTrunk() -> tous les blocs de log
         Set<Tuple<BlockPos, Block>> allBlocks = new HashSet<>();
         
         BlobFoliagePlacer myBlobFolPlacer = new BlobFoliagePlacer(FeatureSpread.fixed(2), FeatureSpread.fixed(0), foliageHeight);
@@ -85,7 +86,7 @@ public class SpiritTreeSpawn{
         ).decorators(ImmutableList.of(TrunkVineTreeDecorator.INSTANCE, LeaveVineTreeDecorator.INSTANCE)).build();
         
         // Place tronc, branches, racines, et récupère les foliage positions
-        getFoliages(world, rand, pos, vineSetTrunk, treeHeight, branch)
+        getFoliages(world, rand, pos, vineSetTrunk, trunkLogs, treeHeight, branch)
                 .forEach((foliage) -> {
                     myBlobFolPlacer.createFoliage(world, rand, baseTreeFeatureConfig, treeHeight, foliage,
                             myBlobFolPlacer.foliageRadius(rand, 0), foliageHeight, vineSetFoliage, box); // le 0 du foliage radius sert à rien il n'est pas utilisé par blob...
@@ -102,11 +103,12 @@ public class SpiritTreeSpawn{
 
         vineSetTrunk.forEach(position -> allBlocks.add(new Tuple<>(position, world.getBlockState(position).getBlock())));
         vineSetFoliage.forEach(position -> allBlocks.add(new Tuple<>(position, world.getBlockState(position).getBlock())));
+        CutsceneHandler.trunkLogs = trunkLogs;
         CutsceneHandler.treeBlocks = allBlocks;
     }
     
     public static List<JungleFoliagePlacer.Foliage> getFoliages(ISeedReader world, Random rand, BlockPos pos,
-                                                                Set<BlockPos> vineSetTrunk, int treeHeight, int branch) {
+                                                                Set<BlockPos> vineSetTrunk, Set<BlockPos> trunkLogs, int treeHeight, int branch) {
         
         List<JungleFoliagePlacer.Foliage> foliagePlacerList = Lists.newArrayList();
 
@@ -122,6 +124,7 @@ public class SpiritTreeSpawn{
             for (BlockPos trunkOffset : trunkOffsets) {
                 BlockPos newPos = logPos.offset(trunkOffset);
                 placeLog(world, newPos, getLogState(SpiritualLogBlock.TreeParts.TRUNK), vineSetTrunk); // pose un bloc de bois
+                trunkLogs.add(newPos);
                 ((SpiritualLogBlock.SpiritualLogTileEntity) world.getBlockEntity(newPos)).setTreeId(treeDataId);
             }
             TreeSaveData.get(world.getLevel()).registerNewTree(treeDataId, treeData);
